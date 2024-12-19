@@ -1,0 +1,162 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 62.5%;
+}
+
+nav {
+    background-color: #dcdcdc;
+    border: 1px solid #808080;
+}
+
+p, strong, li, a, span, td {
+    font-size: 1.5rem;
+}
+
+i {
+    font-size: 2rem;
+}
+
+#logo-brand {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+}
+
+.nav-item {
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.nav-item:hover {
+    border-bottom: 1px solid #ff7f50;
+    transition: 0.5s;
+}
+
+.nav-item:hover a{
+    color: #ff7f50;
+    transition: 0.5s;
+}
+
+.nav-link {
+    text-align: center;
+}
+
+#film-intro {
+    display: flex;
+    justify-content: center;
+}
+
+#left {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#main-img {
+    width: 100%;
+    border: 1px solid black;
+}
+
+#main-img img {
+    width: 100%;
+    height: 40rem;
+}
+
+#action {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+}
+
+#share {
+    width: 20%;
+}
+
+#share button {
+    width: 100%;
+    background-color: #ffb6c1;
+    border: 1px solid red;
+    font-size: 1.5rem;
+}
+
+#download {
+    width: 20%;
+}
+
+#download button {
+    width: 100%;
+    background-color: gold;
+    border: 1px solid goldenrod;
+    font-size: 1.5rem;
+}
+
+#watch {
+    width: 60%;
+}
+
+#watch button {
+    width: 100%;
+    background-color: #1e90ff;
+    border: 1px solid #0000cd;
+    font-size: 1.5rem;
+    color: white;
+}
+
+#right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+#film-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+#film-name {
+    font-size: 2rem;
+}
+
+#film-duration {
+    color: green;
+}
+
+#rating i {
+    color: goldenrod;
+}
+
+#film-genre button {
+    font-size: 1.5rem;
+}
+
+.short-title {
+    font-weight: bold;
+}
+
+.film-info {
+    color: #1e90ff;
+}
+
+#description {
+    border: 1px solid black;
+}
+
+#actors i {
+    font-size: 10rem;
+    color: #1e90ff;
+}
+
+#actors-info {
+    display: flex;
+}
+
+.actor-name {
+    color: green;
+    text-align: center;
+}
