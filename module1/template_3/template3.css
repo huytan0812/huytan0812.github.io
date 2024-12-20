@@ -172,4 +172,50 @@ i {
         justify-content: center;
         align-items: center;
     }
+
+    #navbarSupportedContent li {
+        margin-right: 0 !important;
+    }
+
+    #film-intro {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-left: 0 !important;
+    }
+
+    #left, #right {
+        width: 100%;
+    }
+
+    #action {
+        display: flex;
+        justify-content: center;
+    }
+
+    #share {
+        width: fit-content;
+    }
+
+    #download {
+        width: fit-content;
+    }
+
+    #watch {
+        width: fit-content;
+    }
+
+    #film-description {
+        padding-left: 0 !important;
+    }
+
+    #actors {
+        padding-left: 0px !important;
+    }
+
+    #actors-info {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }
