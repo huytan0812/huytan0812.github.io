@@ -29,6 +29,10 @@ i {
     font-size: 1.5rem;
 }
 
+.nav-link {
+    text-align: center !important;
+}
+
 .nav-item:hover {
     border-bottom: 1px solid #ff7f50;
     transition: 0.5s;
@@ -159,4 +163,13 @@ i {
 .actor-name {
     color: green;
     text-align: center;
+}
+
+@media only screen and (max-width: 576px) {
+    #navContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }
