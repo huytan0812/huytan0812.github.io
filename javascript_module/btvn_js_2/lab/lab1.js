@@ -139,7 +139,7 @@ console.log("Trước khi sắp xếp dùng thuật toán Bubble Sort:", newArr)
 function bubbleSort(arr = []) {
     let temp;
 
-    // Thực hiện arr.length outer loop
+    // Thực hiện arr.length lần outer loop
     for (let i = 0; i < arr.length; i++) {
 
         // Inner loop duyệt từ index 0 tới arr.length - 1 - i
