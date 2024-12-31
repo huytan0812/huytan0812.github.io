@@ -44,3 +44,27 @@ function sumArr(arr = []) {
 
 let d1Sum = sumArr(d1);
 console.log("Tổng của dãy d1:", d1Sum);
+
+for (let number of d2) {
+    if (number % d1Sum == 0) {
+        console.log(`Số ${number} từ mảng d2 chia hết cho tổng của d1 ${d1Sum}`);
+    }
+}
+
+function dividedBy2(arr = []) {
+    let results = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] % 2 == 0) {
+            results.push(arr[i]);
+        }
+    }
+
+    return results;
+}
+
+let dividedBy2_d1= dividedBy2(d1);
+let dividedBy2_d2= dividedBy2(d2);
+
+console.log("Dãy số chia hết cho 2 của mảng d1:", dividedBy2_d1);
+console.log("Dãy số chia hết cho 2 của mảng d2:", dividedBy2_d2);
