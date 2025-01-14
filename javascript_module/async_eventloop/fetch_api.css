@@ -1,0 +1,35 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 62.5%;
+}
+
+p, strong {
+    font-size: 1.5rem;
+}
+
+.card {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+    width: 20rem;
+}
+
+.avatar {
+    border-bottom: 1px solid black;
+}
+
+@media only screen and (max-width: 576px) {
+    #users {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card-holder {
+        width: 100%;
+    }
+
+    .card {
+        width: 100%;
+    }
+}

@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 62.5%;
+}
+
+h2 {
+    text-align: center;
+}
+
+label, p, span {
+    font-size: 2rem;
+}
+
+.form-control {
+    font-size: 1.5rem !important;
+}
+
+.form-check-input {
+    font-size: 1.5rem !important;
+}
+
+#submit-btn {
+    font-size: 1.5rem;
+}
+
+.form-sub {
+    text-align: center;
+    font-weight: bold;
+}
+
+.form-alert {
+    text-align: center;
+    color: red;
+}
+
+form {
+    width: fit-content;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
