@@ -1,5 +1,7 @@
 function CardComponent(dt) {
-    return `
+    let newCardComponent = document.createElement('div');
+    newCardComponent.className = 'weather-card';
+    newCardComponent.innerHTML = `
     <div class="card" style="width: 18rem;">
     <img class="card-img-top" src="..." alt="Card image cap">
     <div class="card-body">
@@ -9,6 +11,7 @@ function CardComponent(dt) {
     </div>
     </div>
     `;
+    return newCardComponent;
 }
 
 export {CardComponent};

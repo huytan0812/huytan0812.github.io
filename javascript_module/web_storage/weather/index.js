@@ -16,6 +16,10 @@ document.addEventListener("DOMContentLoaded", function index() {
 
         let city = search.value;
 
+        // Reset ContentComponent
+        const contentComponent = document.getElementById('content');
+        contentComponent.innerHTML = '';
+
         buildContentComponent(city);
     })
 })
@@ -27,8 +31,6 @@ async function getWeatherInfo(city) {
 
     try {
         response = await fetch(url);
-
-        console.log(typeof(response.status));
 
         if (response.status == 404) {
             throw new Error(`Không tìm thấy thành phố ${city}`);
@@ -76,6 +78,14 @@ async function buildContentComponent(city = "Hanoi") {
         }
 
         contentComponent.innerHTML = ContentComponent(data.city.name);
+
+        const content = document.getElementById('content');
+        let dtList = data.list;
+
+        for (let dt of dtList) {
+            content.append(CardComponent(dt));
+        }
+
     }
     catch (error) {
         console.log(error.message);
