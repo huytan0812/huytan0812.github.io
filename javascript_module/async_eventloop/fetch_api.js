@@ -3,25 +3,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const response = fetch("https://dummyjson.com/users");
 
+    // fetch() returns a promise object
+    console.log(response);
+    // If that Promise object is fullfilled,
+    // it will be resolved with the Response object representing the server's response
+    // which results in PromiseResult in the PromiseObject
+
     response.then(
         (res) => {
-            // fetch() returns a Response object
+            // response.then() returns a Response object
             // res is a response object
             console.log(res);
 
-            // res.json() returns a Promise object
             // json() is a method of Response object
+            // json() takes a Response stream and reads it
+            // it returns a promise which resolves with the result of parsing the body text as JSON
             return res.json();
         }
     ).then(
         (data) => {
+            console.log(data);
+
             const users = data.users;
 
             for (let user of users) {
                 fillCard(user);
             }
+
+            return users;
         }
-    ).catch(
+    ).then(
+        (users) => console.log(users)
+    )
+    .catch(
         (error) => console.log(error)
     )
 
@@ -75,8 +89,13 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 1000
     )
 
-    async1();
-    async2();
-    async3();
-    async4();
+    async function testResponse() {
+        const response = await fetch("https://dummyjson.com/users"); // ~ response = fetch("https://dummyjson.com/users"); response.then();
+        console.log(response);
+
+        const data = await response.json();
+        console.log(data);
+    }
+
+    testResponse();
 })
