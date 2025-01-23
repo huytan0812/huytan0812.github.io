@@ -1,0 +1,46 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 62.5%;
+}
+
+p, span, li, a, strong, label, th, td {
+    font-size: 1.5rem;
+}
+
+th, td {
+    vertical-align: middle;
+}
+
+h2 {
+    font-size: 2.5rem !important;
+}
+
+.form-control {
+    font-size: 1.5rem !important;
+}
+
+.form-check-input {
+    margin-left: 0 !important;
+    font-size: 1.5rem !important;
+}
+
+.btn {
+    font-size: 1.5rem !important;
+}
+
+.page-link {
+    font-size: 1.5rem !important;
+}
+
+#main-content {
+    width: 75%;
+    margin: auto;
+}
+
+#student-form {
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
