@@ -14,7 +14,8 @@ th, td {
 }
 
 h2 {
-    font-size: 2.5rem !important;
+    text-align: center;
+    font-size: 3rem !important;
 }
 
 .form-control {
@@ -32,6 +33,11 @@ h2 {
 
 .page-link {
     font-size: 1.5rem !important;
+}
+
+.form-title {
+    font-weight: bold;
+    font-size: 2rem;
 }
 
 #main-content {

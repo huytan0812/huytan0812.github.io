@@ -1,28 +1,12 @@
 document.addEventListener("DOMContentLoaded", function index() {
+    // Display all Student
     renderAllStudent();
 
     const studentForm = document.forms["student-form"];
     const updateBtns = document.querySelectorAll(".update-btn");
     const deleteBtns = document.getElementsByClassName("delete-btn");
 
-    studentForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const studentFormInputs = studentForm.querySelectorAll("input");
-        const localStudents = JSON.parse(localStorage.getItem('students'));
-        const currentStudent = Object.keys(localStudents).length;
-        const nextStudentKey = `student_${currentStudent + 1}`;
-        const newStudent = {};
-
-        studentFormInputs.forEach((input) => {
-            console.log(input.name);
-            newStudent[input.name] = input.value;
-        })
-
-        localStudents[nextStudentKey] = newStudent;
-
-        localStorage.setItem('students', JSON.stringify(localStudents));
-    })
+    studentForm.addEventListener("submit", (event) => addStudent(event, studentForm));
 
     updateBtns.forEach(
         (updateBtn) => {
@@ -41,6 +25,11 @@ document.addEventListener("DOMContentLoaded", function index() {
 
                 studentFormInputs.forEach(
                     (input) => {
+                        if (input.name == 'gender') {
+                            if (input.value == getStudent['gender']) {
+                                input.checked = true;
+                            }
+                        }
                         input.value = getStudent[input.name];
                     }
                 )
@@ -51,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function index() {
 })
 
 function renderAllStudent() {
+    // Render all students from local storage
     const localStudents = JSON.parse(localStorage.getItem('students'));
 
     const studentsRow = document.getElementById('students-row');
@@ -63,10 +53,15 @@ function renderAllStudent() {
 }
 
 function getAverageScore(student) {
-    return (student.math_score + student.english_score + student.literature_score) / 3;
+    const mathScore = parseInt(student.math_score);
+    const englishScore = parseInt(student.english_score);
+    const literatureScore = parseInt(student.literature_score);
+
+    return (mathScore + englishScore + literatureScore) / 3;
 }
 
 function studentRow(count, student) {
+    // Create a student row for each student info
     const tr = document.createElement('tr');
 
     const stt = document.createElement('td');
@@ -91,4 +86,41 @@ function studentRow(count, student) {
     tr.append(action);
 
     return tr;
+}
+
+function addStudent(event, studentForm) {
+    // Add a new student form the form
+    event.preventDefault();
+
+    const students = document.getElementById('students-row');
+
+    // Get all student info
+    const studentFormInputs = studentForm.querySelectorAll("input");
+
+    // Get all students in the local storage
+    const localStudents = JSON.parse(localStorage.getItem('students'));
+
+    // Get the current amount of students
+    const studentCount = Object.keys(localStudents).length;
+    const nextStudentKey = `student_${studentCount + 1}`;
+
+    const newStudent = {};
+
+    studentFormInputs.forEach((input) => {
+        if (input.name == 'gender') {
+            if (input.checked) {
+                newStudent['gender'] = input.value;
+            }
+        }
+        else {
+            newStudent[input.name] = input.value;
+        }
+    })
+
+    localStudents[nextStudentKey] = newStudent;
+
+    localStorage.setItem('students', JSON.stringify(localStudents));
+    
+    // Append new student row
+    students.append(studentRow(studentCount + 1, newStudent));
 }
