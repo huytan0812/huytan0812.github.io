@@ -50,3 +50,7 @@ h2 {
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
+#update-btns {
+    display: none;
+}

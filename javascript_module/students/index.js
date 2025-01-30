@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", function index() {
                 const getStudent = localStudents[`student_${studentId}`];
                 
                 // Rebuild the Student Form
+                const studentFormTitle = document.getElementById('student-form-title');
+                studentFormTitle.innerHTML = `Thay đổi thông tin học sinh: ${getStudent['name']}`;
+
                 const studentFormInputs = studentForm.querySelectorAll("input");
 
                 studentFormInputs.forEach(
@@ -30,9 +33,16 @@ document.addEventListener("DOMContentLoaded", function index() {
                                 input.checked = true;
                             }
                         }
-                        input.value = getStudent[input.name];
+                        else {
+                            input.value = getStudent[input.name];
+                        }
                     }
                 )
+
+                const addStudentBtn = document.getElementById('add-student-btn');
+                addStudentBtn.style.display = 'none';
+                const updateBtns = document.getElementById('update-btns');
+                updateBtns.style.display = 'block';
             })
         }
     )
