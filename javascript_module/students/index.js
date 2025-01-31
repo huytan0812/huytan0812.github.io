@@ -1,10 +1,17 @@
+import { StudentFormComponent } from './components/student_form.js';
+
 document.addEventListener("DOMContentLoaded", function index() {
+    // Build Student Form
+    buildStudentForm();
+
     // Display all Student
     renderAllStudent();
 
     const studentForm = document.forms["student-form"];
     const updateBtns = document.querySelectorAll(".update-btn");
     const deleteBtns = document.getElementsByClassName("delete-btn");
+
+    const addStudentBtn = document.getElementById('add-student-btn');
 
     studentForm.addEventListener("submit", (event) => addStudent(event, studentForm));
 
@@ -14,40 +21,27 @@ document.addEventListener("DOMContentLoaded", function index() {
                 // Get student id from data attribute
                 const studentId = parseInt(this.dataset.updateStudent);
 
-                // Get all students from the localStorage
-                const localStudents = JSON.parse(localStorage.getItem("students"));
+                // Get current Student info
+                const currentStudentInfo = getStudentInfo(studentId);
 
-                // Get the current student uisng studentId
-                const getStudent = localStudents[`student_${studentId}`];
-                
-                // Rebuild the Student Form
-                const studentFormTitle = document.getElementById('student-form-title');
-                studentFormTitle.innerHTML = `Thay đổi thông tin học sinh: ${getStudent['name']}`;
+                // Build update Student Form
+                updateStudentForm(currentStudentInfo, studentForm);
 
-                const studentFormInputs = studentForm.querySelectorAll("input");
+                const updateStudentBtn = document.getElementById('update-student-btn');
+                const cancelBtn = document.getElementById('cancel-btn');
 
-                studentFormInputs.forEach(
-                    (input) => {
-                        if (input.name == 'gender') {
-                            if (input.value == getStudent['gender']) {
-                                input.checked = true;
-                            }
-                        }
-                        else {
-                            input.value = getStudent[input.name];
-                        }
-                    }
-                )
-
-                const addStudentBtn = document.getElementById('add-student-btn');
-                addStudentBtn.style.display = 'none';
-                const updateBtns = document.getElementById('update-btns');
-                updateBtns.style.display = 'block';
+                updateStudentBtn.addEventListener("click", updateStudentLS);
+                cancelBtn.addEventListener("click", buildStudentForm);
             })
         }
     )
 
 })
+
+function buildStudentForm() {
+    const studentFormComponent = document.getElementsByTagName('studentformcomponent')[0];
+    studentFormComponent.innerHTML = StudentFormComponent();
+}
 
 function renderAllStudent() {
     // Render all students from local storage
@@ -100,6 +94,8 @@ function studentRow(count, student) {
 
 function addStudent(event, studentForm) {
     // Add a new student form the form
+
+    // Prevent the from from submiting
     event.preventDefault();
 
     const students = document.getElementById('students-row');
@@ -133,4 +129,48 @@ function addStudent(event, studentForm) {
     
     // Append new student row
     students.append(studentRow(studentCount + 1, newStudent));
+
+    // Add new Event Listener for new update Student btn
+    const newUpdateStudentBtn = document.getElementsByClassName('update-btn')[studentCount];
+    newUpdateStudentBtn.addEventListener("click", updateStudentCb);
+}
+
+function getStudentInfo(studentId) {
+    // Get all students from the localStorage
+    const localStudents = JSON.parse(localStorage.getItem("students"));
+
+    // Get the current student uisng studentId
+    const studentInfo = localStudents[`student_${studentId}`];
+    
+    return studentInfo;
+}
+
+function updateStudentForm(studentInfo, studentForm) {
+    // Rebuild the Student Form
+    const studentFormTitle = document.getElementById('student-form-title');
+    studentFormTitle.innerHTML = `Thay đổi thông tin học sinh: ${studentInfo['name']}`;
+
+    const studentFormInputs = studentForm.querySelectorAll("input");
+
+    studentFormInputs.forEach(
+        (input) => {
+            if (input.name == 'gender') {
+                if (input.value == studentInfo['gender']) {
+                    input.checked = true;
+                }
+            }
+            else {
+                input.value = studentInfo[input.name];
+            }
+        }
+    )
+
+    const addStudentBtn = document.getElementById('add-student-btn');
+    addStudentBtn.style.display = 'none';
+    const updateBtns = document.getElementById('update-btns');
+    updateBtns.style.display = 'block';
+}
+
+function updateStudentLS() {
+    console.log("Update Student to LS");
 }
