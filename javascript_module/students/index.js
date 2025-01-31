@@ -17,25 +17,8 @@ document.addEventListener("DOMContentLoaded", function index() {
 
     updateBtns.forEach(
         (updateBtn) => {
-            updateBtn.addEventListener("click", function() {
-                // Get student id from data attribute
-                const studentId = parseInt(this.dataset.updateStudent);
-
-                // Get current Student info
-                const currentStudentInfo = getStudentInfo(studentId);
-
-                // Build update Student Form
-                updateStudentForm(currentStudentInfo, studentForm);
-
-                const updateStudentBtn = document.getElementById('update-student-btn');
-                const cancelBtn = document.getElementById('cancel-btn');
-
-                updateStudentBtn.addEventListener("click", updateStudentLS);
-                cancelBtn.addEventListener("click", buildStudentForm);
-            })
-        }
-    )
-
+            updateBtn.addEventListener("click", () => updateStudentCb(updateBtn));
+        })
 })
 
 function buildStudentForm() {
@@ -132,7 +115,26 @@ function addStudent(event, studentForm) {
 
     // Add new Event Listener for new update Student btn
     const newUpdateStudentBtn = document.getElementsByClassName('update-btn')[studentCount];
-    newUpdateStudentBtn.addEventListener("click", updateStudentCb);
+    newUpdateStudentBtn.addEventListener("click", () => updateStudentCb(newUpdateStudentBtn));
+}
+
+function updateStudentCb(updateBtn) {
+    const studentForm = document.forms["student-form"];
+
+    // / Get student id from data attribute
+    const studentId = parseInt(updateBtn.dataset.updateStudent);
+
+    // Get current Student info
+    const currentStudentInfo = getStudentInfo(studentId);
+
+    // Build update Student Form
+    updateStudentForm(currentStudentInfo, studentForm);
+
+    const updateStudentBtn = document.getElementById('update-student-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+
+    updateStudentBtn.addEventListener("click", updateStudentLS);
+    cancelBtn.addEventListener("click", buildStudentForm);
 }
 
 function getStudentInfo(studentId) {
