@@ -126,23 +126,36 @@ function updateStudentCb(updateBtn) {
 
     // Get current Student info
     const currentStudentInfo = getStudentInfo(studentId);
+    const studentKey = Object.keys(currentStudentInfo)[0];
+    const studentInfo = currentStudentInfo[studentKey];
 
     // Build update Student Form
-    updateStudentForm(currentStudentInfo, studentForm);
+    updateStudentForm(studentInfo, studentForm);
 
     const updateStudentBtn = document.getElementById('update-student-btn');
     const cancelBtn = document.getElementById('cancel-btn');
 
-    updateStudentBtn.addEventListener("click", updateStudentLS);
+    if (updateStudentBtn.click) {
+        const prevStudentKey = localStorage.getItem('studentKey');
+        console.log(prevStudentKey);
+        updateStudentBtn.removeEventListener("click", function updateStudentHandler() {
+            updateStudentLS(prevStudentKey);
+        });
+    }
+
+    updateStudentBtn.addEventListener("click", function updateStudentHandler() {
+        updateStudentLS(studentKey)
+    });
+    localStorage.setItem('studentKey', studentKey);
     cancelBtn.addEventListener("click", buildStudentForm);
 }
 
 function getStudentInfo(studentId) {
-    // Get all students from the localStorage
     const localStudents = JSON.parse(localStorage.getItem("students"));
 
-    // Get the current student uisng studentId
-    const studentInfo = localStudents[`student_${studentId}`];
+    const studentKey = `student_${studentId}`;
+    const studentInfo = {};
+    studentInfo[studentKey] = localStudents[studentKey];
     
     return studentInfo;
 }
@@ -173,6 +186,11 @@ function updateStudentForm(studentInfo, studentForm) {
     updateBtns.style.display = 'block';
 }
 
-function updateStudentLS() {
-    console.log("Update Student to LS");
+function updateStudentHandler() {
+}
+
+function updateStudentLS(studentKey) {
+    console.log("Update Student to LS", studentKey);
+    const studentInfo = document.forms['student-form'];
+    const inputs = studentInfo.querySelectorAll('input');
 }
