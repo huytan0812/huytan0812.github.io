@@ -135,17 +135,37 @@ function updateStudentCb(updateBtn) {
     const updateStudentBtn = document.getElementById('update-student-btn');
     const cancelBtn = document.getElementById('cancel-btn');
 
+    // if (updateStudentBtn.click) {
+    //     const prevStudentKey = localStorage.getItem('studentKey');
+    //     // boundUpdateStudent = updateStudentLS.bind(null, prevStudentKey);
+    //     updateStudentBtn.removeEventListener("click", function wrapper() {
+    //         updateStudentLS(prevStudentKey);
+    //     });
+    // }
+
+    // boundUpdateStudent = updateStudentLS.bind(null, studentKey);
+
+    const prevStudentKey = localStorage.getItem('studentKey');
+    const prevStudentKeyBound = testRemoving.bind(null, prevStudentKey);
+
+    const prevStudentKeyBound_1 = testRemoving;
+
     if (updateStudentBtn.click) {
-        const prevStudentKey = localStorage.getItem('studentKey');
-        console.log(prevStudentKey);
-        updateStudentBtn.removeEventListener("click", function updateStudentHandler() {
-            updateStudentLS(prevStudentKey);
-        });
+        updateStudentBtn.removeEventListener("click", testRemoving);
     }
 
-    updateStudentBtn.addEventListener("click", function updateStudentHandler() {
-        updateStudentLS(studentKey)
-    });
+    const newStudentKeyBound = testRemoving.bind(null, studentKey);
+
+    const prevStudentKeyBound_2 = testRemoving;
+
+    console.log(prevStudentKeyBound_1 == prevStudentKeyBound_2);
+
+    console.log("With arguments:", prevStudentKeyBound == newStudentKeyBound);
+
+    updateStudentBtn.addEventListener("click", testRemoving);
+
+    console.log()
+
     localStorage.setItem('studentKey', studentKey);
     cancelBtn.addEventListener("click", buildStudentForm);
 }
@@ -186,7 +206,8 @@ function updateStudentForm(studentInfo, studentForm) {
     updateBtns.style.display = 'block';
 }
 
-function updateStudentHandler() {
+function testRemoving(studentKey = 1) {
+    console.log("Removing...", studentKey);
 }
 
 function updateStudentLS(studentKey) {
