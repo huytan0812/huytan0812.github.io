@@ -46,7 +46,7 @@ function StudentFormComponent() {
     </div>
     <button type="submit" class="btn btn-primary mt-3" id="add-student-btn">Thêm học sinh</button>
     <p id="update-btns" class="mt-3">
-        <button type="button" class="btn btn-primary" id="update-student-btn">Cập nhật</button>
+        <button type="button" class="btn btn-primary" data-student-key="" id="update-student-btn">Cập nhật</button>
         <button type="button" class="btn btn-outline-secondary" id="cancel-btn">Huỷ</button>
     </p>
     `;

@@ -135,38 +135,8 @@ function updateStudentCb(updateBtn) {
     const updateStudentBtn = document.getElementById('update-student-btn');
     const cancelBtn = document.getElementById('cancel-btn');
 
-    // if (updateStudentBtn.click) {
-    //     const prevStudentKey = localStorage.getItem('studentKey');
-    //     // boundUpdateStudent = updateStudentLS.bind(null, prevStudentKey);
-    //     updateStudentBtn.removeEventListener("click", function wrapper() {
-    //         updateStudentLS(prevStudentKey);
-    //     });
-    // }
-
-    // boundUpdateStudent = updateStudentLS.bind(null, studentKey);
-
-    const prevStudentKey = localStorage.getItem('studentKey');
-    const prevStudentKeyBound = testRemoving.bind(null, prevStudentKey);
-
-    const prevStudentKeyBound_1 = testRemoving;
-
-    if (updateStudentBtn.click) {
-        updateStudentBtn.removeEventListener("click", testRemoving);
-    }
-
-    const newStudentKeyBound = testRemoving.bind(null, studentKey);
-
-    const prevStudentKeyBound_2 = testRemoving;
-
-    console.log(prevStudentKeyBound_1 == prevStudentKeyBound_2);
-
-    console.log("With arguments:", prevStudentKeyBound == newStudentKeyBound);
-
+    updateStudentBtn.dataset.studentKey = studentKey;
     updateStudentBtn.addEventListener("click", testRemoving);
-
-    console.log()
-
-    localStorage.setItem('studentKey', studentKey);
     cancelBtn.addEventListener("click", buildStudentForm);
 }
 
@@ -206,8 +176,11 @@ function updateStudentForm(studentInfo, studentForm) {
     updateBtns.style.display = 'block';
 }
 
-function testRemoving(studentKey = 1) {
-    console.log("Removing...", studentKey);
+function testRemoving(event) {
+    const btn = event.target;
+    const studentKey = btn.dataset.studentKey;
+    console.log("Updating...", studentKey);
+    return event;
 }
 
 function updateStudentLS(studentKey) {
