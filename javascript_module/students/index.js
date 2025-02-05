@@ -51,12 +51,19 @@ function studentRow(count, student) {
     // Create a student row for each student info
     const tr = document.createElement('tr');
 
+    const studentKey = `student_${count}`;
+
+    const studentRowId = `row-${studentKey}`;
+    tr.setAttribute('id', studentRowId);
+
     const stt = document.createElement('td');
     stt.innerHTML = count;
     tr.append(stt);
 
     for (let prop in student) {
         const td = document.createElement('td');
+        td.className = 'student-field';
+        td.dataset.fieldName = prop;
         td.innerHTML = student[prop];
         tr.append(td);
     }
@@ -136,7 +143,7 @@ function updateStudentCb(updateBtn) {
     const cancelBtn = document.getElementById('cancel-btn');
 
     updateStudentBtn.dataset.studentKey = studentKey;
-    updateStudentBtn.addEventListener("click", testRemoving);
+    updateStudentBtn.addEventListener("click", updateStudent);
     cancelBtn.addEventListener("click", buildStudentForm);
 }
 
@@ -176,15 +183,42 @@ function updateStudentForm(studentInfo, studentForm) {
     updateBtns.style.display = 'block';
 }
 
-function testRemoving(event) {
+function updateStudentRow(studentKey, student) {
+    const studentRowId = `row-${studentKey}`;
+    const studentRow = document.getElementById(studentRowId);
+
+    const fields = studentRow.querySelectorAll('.student-field');
+    fields.forEach(
+        (field) => {
+            console.log(student[field.dataset.fieldName]);
+            field.innerHTML = student[field.dataset.fieldName];
+        }
+    )
+}
+
+function updateStudent(event) {
     const btn = event.target;
     const studentKey = btn.dataset.studentKey;
     console.log("Updating...", studentKey);
-    return event;
-}
+    
+    const localStudents = JSON.parse(localStorage.getItem('students'));
+    const student = localStudents[studentKey];
 
-function updateStudentLS(studentKey) {
-    console.log("Update Student to LS", studentKey);
-    const studentInfo = document.forms['student-form'];
-    const inputs = studentInfo.querySelectorAll('input');
+    const studentForm = document.forms['student-form'];
+    const studentInputs = studentForm.querySelectorAll('input');
+    studentInputs.forEach(
+        (input) => {
+            if (input.name == 'gender') {
+                if (input.checked) {
+                    student['gender'] = input.value;
+                }
+            }
+            else {
+                student[input.name] = input.value;
+            }
+        }
+    )
+    
+    localStorage.setItem('students', JSON.stringify(localStudents));
+    updateStudentRow(studentKey, student);
 }
