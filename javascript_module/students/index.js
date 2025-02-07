@@ -9,9 +9,7 @@ document.addEventListener("DOMContentLoaded", function index() {
 
     const studentForm = document.forms["student-form"];
     const updateBtns = document.querySelectorAll(".update-btn");
-    const deleteBtns = document.getElementsByClassName("delete-btn");
-
-    const addStudentBtn = document.getElementById('add-student-btn');
+    const deleteBtns = document.querySelectorAll(".delete-btn");
 
     studentForm.addEventListener("submit", (event) => addStudent(event, studentForm));
 
@@ -19,6 +17,12 @@ document.addEventListener("DOMContentLoaded", function index() {
         (updateBtn) => {
             updateBtn.addEventListener("click", () => updateStudentCb(updateBtn));
         })
+
+    deleteBtns.forEach(
+        (deleteBtn) => {
+            deleteBtn.addEventListener("click", () => deleteStudentCb(deleteBtn));
+        }
+    )
 })
 
 function buildStudentForm() {
@@ -74,8 +78,8 @@ function studentRow(count, student) {
 
     const action = document.createElement('td');
     action.innerHTML = `
-    <button type="button" class="btn btn-success update-btn" data-update-student="${count}">Update</button>
-    <button type="button" class="btn btn-danger delete-btn" data-delete-student"${count}">Delete</button>
+    <button type="button" class="btn btn-success update-btn" data-update-student="${studentKey}">Update</button>
+    <button type="button" class="btn btn-danger delete-btn" data-delete-student="${studentKey}">Delete</button>
     `;
     tr.append(action);
 
@@ -94,10 +98,18 @@ function addStudent(event, studentForm) {
     const studentFormInputs = studentForm.querySelectorAll("input");
 
     // Get all students in the local storage
-    const localStudents = JSON.parse(localStorage.getItem('students'));
+    let localStudents = JSON.parse(localStorage.getItem('students'));
+    let studentCount;
 
-    // Get the current amount of students
-    const studentCount = Object.keys(localStudents).length;
+    if (!localStudents) {
+        studentCount = 0;
+        localStudents = {};
+    }
+    else {
+        // Get the current amount of students
+        studentCount = Object.keys(localStudents).length;
+    }
+
     const nextStudentKey = `student_${studentCount + 1}`;
 
     const newStudent = {};
@@ -123,17 +135,20 @@ function addStudent(event, studentForm) {
     // Add new Event Listener for new update Student btn
     const newUpdateStudentBtn = document.getElementsByClassName('update-btn')[studentCount];
     newUpdateStudentBtn.addEventListener("click", () => updateStudentCb(newUpdateStudentBtn));
+
+    // Add new Event Listener for new delete Student btn
+    const newDelStudentBtn = document.getElementsByClassName('delete-btn')[studentCount];
+    newDelStudentBtn.addEventListener("click", () => deleteStudentCb(newDelStudentBtn));
 }
 
 function updateStudentCb(updateBtn) {
     const studentForm = document.forms["student-form"];
 
     // / Get student id from data attribute
-    const studentId = parseInt(updateBtn.dataset.updateStudent);
+    const studentKey = updateBtn.dataset.updateStudent;
 
     // Get current Student info
-    const currentStudentInfo = getStudentInfo(studentId);
-    const studentKey = Object.keys(currentStudentInfo)[0];
+    const currentStudentInfo = getStudentInfo(studentKey);
     const studentInfo = currentStudentInfo[studentKey];
 
     // Build update Student Form
@@ -142,15 +157,14 @@ function updateStudentCb(updateBtn) {
     const updateStudentBtn = document.getElementById('update-student-btn');
     const cancelBtn = document.getElementById('cancel-btn');
 
-    updateStudentBtn.dataset.studentKey = studentKey;
     updateStudentBtn.addEventListener("click", updateStudent);
     cancelBtn.addEventListener("click", buildStudentForm);
 }
 
-function getStudentInfo(studentId) {
+function getStudentInfo(studentKey) {
+    // Implement try catch blocl later
     const localStudents = JSON.parse(localStorage.getItem("students"));
 
-    const studentKey = `student_${studentId}`;
     const studentInfo = {};
     studentInfo[studentKey] = localStudents[studentKey];
     
@@ -190,7 +204,6 @@ function updateStudentRow(studentKey, student) {
     const fields = studentRow.querySelectorAll('.student-field');
     fields.forEach(
         (field) => {
-            console.log(student[field.dataset.fieldName]);
             field.innerHTML = student[field.dataset.fieldName];
         }
     )
@@ -198,7 +211,7 @@ function updateStudentRow(studentKey, student) {
 
 function updateStudent(event) {
     const btn = event.target;
-    const studentKey = btn.dataset.studentKey;
+    const studentKey = btn.dataset.updateStudent;
     console.log("Updating...", studentKey);
     
     const localStudents = JSON.parse(localStorage.getItem('students'));
@@ -219,6 +232,28 @@ function updateStudent(event) {
         }
     )
     
+    // Update student to Local Storage
     localStorage.setItem('students', JSON.stringify(localStudents));
+
+    // Update student row in the table
     updateStudentRow(studentKey, student);
+}
+
+function deleteStudentCb(deleteBtn) {
+    const studentKey = deleteBtn.dataset.deleteStudent;
+    console.log("Deleting student:", studentKey);
+    const student = getStudentInfo(studentKey);
+    localStorage.setItem('delete-student', JSON.stringify(student));
+
+    const students = JSON.parse(localStorage.getItem('students'));
+
+    // Delete the student in the local storage
+    delete students[studentKey];
+    localStorage.setItem('students', JSON.stringify(students));
+
+    // Rerender the table
+    renderAllStudent();
+
+    const deleteStudent = JSON.parse(localStorage.getItem('delete-student'));
+    console.log("Delete:", deleteStudent);
 }
