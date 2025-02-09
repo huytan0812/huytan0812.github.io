@@ -13,16 +13,16 @@ document.addEventListener("DOMContentLoaded", function index() {
 
     studentForm.addEventListener("submit", (event) => addStudent(event, studentForm));
 
-    updateBtns.forEach(
-        (updateBtn) => {
-            updateBtn.addEventListener("click", () => updateStudentCb(updateBtn));
-        })
+    // updateBtns.forEach(
+    //     (updateBtn) => {
+    //         updateBtn.addEventListener("click", () => updateStudentCb(updateBtn));
+    //     })
 
-    deleteBtns.forEach(
-        (deleteBtn) => {
-            deleteBtn.addEventListener("click", () => deleteStudentCb(deleteBtn));
-        }
-    )
+    // deleteBtns.forEach(
+    //     (deleteBtn) => {
+    //         deleteBtn.addEventListener("click", () => deleteStudentCb(deleteBtn));
+    //     }
+    // )
 })
 
 function buildStudentForm() {
@@ -37,8 +37,8 @@ function renderAllStudent() {
     const studentsRow = document.getElementById('students-row');
     let count = 1;
 
-    for (let student in localStudents) {
-        studentsRow.append(studentRow(count, localStudents[student]));
+    for (let studentKey in localStudents) {
+        studentsRow.append(studentRow(count, studentKey, localStudents[studentKey]));
         count++;
     }
 }
@@ -51,11 +51,9 @@ function getAverageScore(student) {
     return (mathScore + englishScore + literatureScore) / 3;
 }
 
-function studentRow(count, student) {
+function studentRow(count, studentKey, studentInfo) {
     // Create a student row for each student info
     const tr = document.createElement('tr');
-
-    const studentKey = `student_${count}`;
 
     const studentRowId = `row-${studentKey}`;
     tr.setAttribute('id', studentRowId);
@@ -64,24 +62,34 @@ function studentRow(count, student) {
     stt.innerHTML = count;
     tr.append(stt);
 
-    for (let prop in student) {
+    for (let prop in studentInfo) {
         const td = document.createElement('td');
         td.className = 'student-field';
         td.dataset.fieldName = prop;
-        td.innerHTML = student[prop];
+        td.innerHTML = studentInfo[prop];
         tr.append(td);
     }
 
     const average = document.createElement('td');
-    average.innerHTML = getAverageScore(student);
+    average.className = 'average-score';
+    average.innerHTML = getAverageScore(studentInfo);
     tr.append(average);
 
     const action = document.createElement('td');
+    // const updateBtn = document.createElement('button');
+    // updateBtn.type = 'button';
+    // updateBtn.classList("btn", "btn-success", "update-btn");
+    // updateBtn.
     action.innerHTML = `
     <button type="button" class="btn btn-success update-btn" data-update-student="${studentKey}">Update</button>
     <button type="button" class="btn btn-danger delete-btn" data-delete-student="${studentKey}">Delete</button>
     `;
     tr.append(action);
+
+    const updateBtn = action.getElementsByClassName('update-btn')[0];
+    const deleteBtn = action.getElementsByClassName('delete-btn')[0];
+    updateBtn.addEventListener("click", () => updateStudentCb(updateBtn));
+    deleteBtn.addEventListener("click", () => deleteStudentCb(deleteBtn));
 
     return tr;
 }
@@ -100,20 +108,25 @@ function addStudent(event, studentForm) {
     // Get all students in the local storage
     let localStudents = JSON.parse(localStorage.getItem('students'));
     let studentCount;
+    let studentPK;
 
     if (!localStudents) {
+        studentPK = 0;
         studentCount = 0;
         localStudents = {};
     }
     else {
+        // Get the current PK
+        studentPK = JSON.parse(localStorage.getItem('studentPK'));
+
         // Get the current amount of students
         studentCount = Object.keys(localStudents).length;
     }
 
-    const nextStudentKey = `student_${studentCount + 1}`;
+    studentPK += 1;
+    const nextStudentKey = `student_${studentPK}`;
 
     const newStudent = {};
-
     studentFormInputs.forEach((input) => {
         if (input.name == 'gender') {
             if (input.checked) {
@@ -128,9 +141,10 @@ function addStudent(event, studentForm) {
     localStudents[nextStudentKey] = newStudent;
 
     localStorage.setItem('students', JSON.stringify(localStudents));
+    localStorage.setItem('studentPK', JSON.stringify(studentPK));
     
     // Append new student row
-    students.append(studentRow(studentCount + 1, newStudent));
+    students.append(studentRow(studentCount + 1, nextStudentKey, newStudent));
 
     // Add new Event Listener for new update Student btn
     const newUpdateStudentBtn = document.getElementsByClassName('update-btn')[studentCount];
@@ -157,6 +171,7 @@ function updateStudentCb(updateBtn) {
     const updateStudentBtn = document.getElementById('update-student-btn');
     const cancelBtn = document.getElementById('cancel-btn');
 
+    updateStudentBtn.dataset.studentKey = studentKey;
     updateStudentBtn.addEventListener("click", updateStudent);
     cancelBtn.addEventListener("click", buildStudentForm);
 }
@@ -207,15 +222,21 @@ function updateStudentRow(studentKey, student) {
             field.innerHTML = student[field.dataset.fieldName];
         }
     )
+
+    const averageScore = studentRow.getElementsByClassName('average-score')[0];
+    averageScore.innerHTML = getAverageScore(student);
 }
 
 function updateStudent(event) {
     const btn = event.target;
-    const studentKey = btn.dataset.updateStudent;
-    console.log("Updating...", studentKey);
+    const studentKey = btn.dataset.studentKey;
+
+    console.log(studentKey);
     
     const localStudents = JSON.parse(localStorage.getItem('students'));
     const student = localStudents[studentKey];
+
+    console.log(student);
 
     const studentForm = document.forms['student-form'];
     const studentInputs = studentForm.querySelectorAll('input');
@@ -250,6 +271,10 @@ function deleteStudentCb(deleteBtn) {
     // Delete the student in the local storage
     delete students[studentKey];
     localStorage.setItem('students', JSON.stringify(students));
+
+    // Reset the table
+    const studentsRow = document.getElementById('students-row');
+    studentsRow.innerHTML = "";
 
     // Rerender the table
     renderAllStudent();
