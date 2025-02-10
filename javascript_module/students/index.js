@@ -1,28 +1,16 @@
 import { StudentFormComponent } from './components/student_form.js';
+import { StudentTableComponent, studentRow, getAverageScore} from './components/student_table_component.js';
 
 document.addEventListener("DOMContentLoaded", function index() {
     // Build Student Form
     buildStudentForm();
 
     // Display all Student
-    renderAllStudent();
+    buildStudentTable();
 
     const studentForm = document.forms["student-form"];
-    const updateBtns = document.querySelectorAll(".update-btn");
-    const deleteBtns = document.querySelectorAll(".delete-btn");
-
     studentForm.addEventListener("submit", (event) => addStudent(event, studentForm));
 
-    // updateBtns.forEach(
-    //     (updateBtn) => {
-    //         updateBtn.addEventListener("click", () => updateStudentCb(updateBtn));
-    //     })
-
-    // deleteBtns.forEach(
-    //     (deleteBtn) => {
-    //         deleteBtn.addEventListener("click", () => deleteStudentCb(deleteBtn));
-    //     }
-    // )
 })
 
 function buildStudentForm() {
@@ -30,68 +18,9 @@ function buildStudentForm() {
     studentFormComponent.innerHTML = StudentFormComponent();
 }
 
-function renderAllStudent() {
-    // Render all students from local storage
-    const localStudents = JSON.parse(localStorage.getItem('students'));
-
-    const studentsRow = document.getElementById('students-row');
-    let count = 1;
-
-    for (let studentKey in localStudents) {
-        studentsRow.append(studentRow(count, studentKey, localStudents[studentKey]));
-        count++;
-    }
-}
-
-function getAverageScore(student) {
-    const mathScore = parseInt(student.math_score);
-    const englishScore = parseInt(student.english_score);
-    const literatureScore = parseInt(student.literature_score);
-
-    return (mathScore + englishScore + literatureScore) / 3;
-}
-
-function studentRow(count, studentKey, studentInfo) {
-    // Create a student row for each student info
-    const tr = document.createElement('tr');
-
-    const studentRowId = `row-${studentKey}`;
-    tr.setAttribute('id', studentRowId);
-
-    const stt = document.createElement('td');
-    stt.innerHTML = count;
-    tr.append(stt);
-
-    for (let prop in studentInfo) {
-        const td = document.createElement('td');
-        td.className = 'student-field';
-        td.dataset.fieldName = prop;
-        td.innerHTML = studentInfo[prop];
-        tr.append(td);
-    }
-
-    const average = document.createElement('td');
-    average.className = 'average-score';
-    average.innerHTML = getAverageScore(studentInfo);
-    tr.append(average);
-
-    const action = document.createElement('td');
-    // const updateBtn = document.createElement('button');
-    // updateBtn.type = 'button';
-    // updateBtn.classList("btn", "btn-success", "update-btn");
-    // updateBtn.
-    action.innerHTML = `
-    <button type="button" class="btn btn-success update-btn" data-update-student="${studentKey}">Update</button>
-    <button type="button" class="btn btn-danger delete-btn" data-delete-student="${studentKey}">Delete</button>
-    `;
-    tr.append(action);
-
-    const updateBtn = action.getElementsByClassName('update-btn')[0];
-    const deleteBtn = action.getElementsByClassName('delete-btn')[0];
-    updateBtn.addEventListener("click", () => updateStudentCb(updateBtn));
-    deleteBtn.addEventListener("click", () => deleteStudentCb(deleteBtn));
-
-    return tr;
+function buildStudentTable() {
+    const studentTableComponent = document.getElementsByTagName('studenttablecomponent')[0];
+    studentTableComponent.appendChild(StudentTableComponent());
 }
 
 function addStudent(event, studentForm) {
@@ -277,8 +206,12 @@ function deleteStudentCb(deleteBtn) {
     studentsRow.innerHTML = "";
 
     // Rerender the table
-    renderAllStudent();
+    const studentTableComponent = document.getElementsByTagName('studenttablecomponent')[0];
+    studentTableComponent.innerHTML = '';
+    buildStudentTable();
 
     const deleteStudent = JSON.parse(localStorage.getItem('delete-student'));
     console.log("Delete:", deleteStudent);
 }
+
+export { updateStudentCb, deleteStudentCb };

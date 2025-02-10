@@ -22,8 +22,8 @@
             </form>
         </section>
         <section id="score">
-            <StudentsComponent></StudentsComponent>
-            <table class="table">
+            <StudentTableComponent></StudentTableComponent>
+            <!-- <table class="table">
                 <thead>
                   <tr>
                     <th scope="col">STT</th>
@@ -37,6 +37,7 @@
                   </tr>
                 </thead>
                 <tbody id="students-row">
+                    <StudentTableComponent></StudentTableComponent>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -60,7 +61,7 @@
                         </td>
                     </tr>
                 </tfoot>
-              </table>
+              </table> -->
         </section>
     </div>
     <!-- Student data -->
@@ -68,5 +69,7 @@
     <!-- Average score function -->
     <script src="index.js" type="module"></script>
     <script src="components/student_form.js" type="module"></script>
+    <script src="components/student_table_component.js" type="module"></script>
+    <script src="components/pagination_component.js" type="module"></script>
 </body>
 </html>

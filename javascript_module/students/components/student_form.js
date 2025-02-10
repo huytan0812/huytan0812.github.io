@@ -1,5 +1,5 @@
 function StudentFormComponent() {
-    return `
+    const studentFormComponent = `
     <p class="form-title" id="student-form-title">
         Thêm học sinh
     </p>
@@ -50,6 +50,8 @@ function StudentFormComponent() {
         <button type="button" class="btn btn-outline-secondary" id="cancel-btn">Huỷ</button>
     </p>
     `;
+
+    return studentFormComponent;
 }
 
 export { StudentFormComponent };
