@@ -1,7 +1,7 @@
 import { updateStudentCb, deleteStudentCb } from '../index.js';
 import { PaginationComponent } from "./pagination_component.js";
 
-function StudentTableComponent(page = 1) {
+function StudentTableComponent(page = 3) {
     const studentTable = document.createElement('table');
     studentTable.className = 'table';
     studentTable.innerHTML = `
@@ -23,18 +23,21 @@ function StudentTableComponent(page = 1) {
     tbody.setAttribute('id', 'students-row');
     studentTable.append(tbody);
 
+    // Get all students from local storage
+    const localStudents = JSON.parse(localStorage.getItem('students'));
+    const studentCount = (localStudents) ? Object.keys(localStudents).length : 0;
+    console.log("Student count:", studentCount);
+
     const tfoot = document.createElement('tfoot');
     tfoot.innerHTML = `
     <tr>
         <td colspan="8" class="d-flex flex-column justify-content-center">
-            ${PaginationComponent()}
+            ${PaginationComponent(studentCount)}
         </td>
     </tr>
     `;
     studentTable.append(tfoot);
 
-    // Get all students from local storage
-    const localStudents = JSON.parse(localStorage.getItem('students'));
     const studentsArr = Object.entries(localStudents);
 
     let endIndex = page * 5;
@@ -42,6 +45,10 @@ function StudentTableComponent(page = 1) {
 
     if (endIndex > studentsArr.length) {
         endIndex = studentsArr.length;
+    }
+
+    for (let i = startIndex; i < endIndex; i++) {
+        console.log(studentsArr[i]);
     }
 
     let count = 1;
