@@ -2,6 +2,8 @@ import { updateStudentCb, deleteStudentCb } from '../index.js';
 import { PaginationComponent } from "./pagination_component.js";
 
 function StudentTableComponent(page = 1) {
+    console.log("Page click:", page);
+    
     const studentTable = document.createElement('table');
     studentTable.className = 'table';
     studentTable.innerHTML = `
@@ -47,16 +49,18 @@ function StudentTableComponent(page = 1) {
         endIndex = studentsArr.length;
     }
 
+    console.log(startIndex, endIndex);
+
     for (let i = startIndex; i < endIndex; i++) {
-        console.log(studentsArr[i]);
+        tbody.append(studentRow(i + 1, studentsArr[i][0], studentsArr[i][1]));
     }
 
-    let count = 1;
+    // let count = 1;
 
-    for (let studentKey in localStudents) {
-        tbody.append(studentRow(count, studentKey, localStudents[studentKey]));
-        count++;
-    }
+    // for (let studentKey in localStudents) {
+    //     tbody.append(studentRow(count, studentKey, localStudents[studentKey]));
+    //     count++;
+    // }
 
     return studentTable;
 }

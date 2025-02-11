@@ -15,9 +15,9 @@ function PaginationComponent(studentCount, page) {
 
 function renderPreviousBtn(pageActive) {
     const prevBtn = (pageActive > 1) ? `<li class="page-item" id="prev-btn">
-                <a class="page-link" href="#">Previous</a>
+                <a class="page-link" href="#" role="button">Previous</a>
             </li>` : `<li class="page-item disabled" id="prev-btn">
-                <a class="page-link" href="#">Previous</a>
+                <a class="page-link" href="#" role="button">Previous</a>
             </li>`;
     return prevBtn;
 }
@@ -28,13 +28,13 @@ function renderPageBtns(pages, pageActive) {
         if (pageActive == page) {
             btns += `
             <li class="page-item page-btn active" data-page="${ page }">
-                <a class="page-link" href="#">${ page }</a>
+                <a class="page-link" href="#" role="button">${ page }</a>
             </li>`;
         }
         else {
             btns += `
             <li class="page-item page-btn" data-page="${ page }">
-                <a class="page-link" href="#">${ page }</a>
+                <a class="page-link" href="#" role="button">${ page }</a>
             </li>
             `;
         }
@@ -44,9 +44,9 @@ function renderPageBtns(pages, pageActive) {
 
 function renderNextBtn(pageActive, pages) {
     const nextBtn = (pageActive < pages) ? ` <li class="page-item" id="next-btn">
-                <a class="page-link" href="#">Next</a>
+                <a class="page-link" href="#" role="button">Next</a>
             </li>` : ` <li class="page-item disabled" id="next-btn">
-                <a class="page-link" href="#">Next</a>
+                <a class="page-link" href="#" role="button">Next</a>
             </li>`;
     return nextBtn;
 }
