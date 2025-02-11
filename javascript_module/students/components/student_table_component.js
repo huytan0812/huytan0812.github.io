@@ -1,7 +1,7 @@
 import { updateStudentCb, deleteStudentCb } from '../index.js';
 import { PaginationComponent } from "./pagination_component.js";
 
-function StudentTableComponent(page = 3) {
+function StudentTableComponent(page = 1) {
     const studentTable = document.createElement('table');
     studentTable.className = 'table';
     studentTable.innerHTML = `
@@ -24,7 +24,7 @@ function StudentTableComponent(page = 3) {
     studentTable.append(tbody);
 
     // Get all students from local storage
-    const localStudents = JSON.parse(localStorage.getItem('students'));
+    const localStudents = (localStorage.getItem('students')) ? JSON.parse(localStorage.getItem('students')) : {};
     const studentCount = (localStudents) ? Object.keys(localStudents).length : 0;
     console.log("Student count:", studentCount);
 
@@ -32,7 +32,7 @@ function StudentTableComponent(page = 3) {
     tfoot.innerHTML = `
     <tr>
         <td colspan="8" class="d-flex flex-column justify-content-center">
-            ${PaginationComponent(studentCount)}
+            ${PaginationComponent(studentCount, page)}
         </td>
     </tr>
     `;

@@ -11,6 +11,17 @@ document.addEventListener("DOMContentLoaded", function index() {
     const studentForm = document.forms["student-form"];
     studentForm.addEventListener("submit", (event) => addStudent(event, studentForm));
 
+    const prevBtn = document.getElementById('prev-btn');
+
+    const pageBtns = document.querySelectorAll('.page-btn');
+    pageBtns.forEach(
+        (pageBtn) => pageBtn.addEventListener("click", () => {
+            buildStudentTable(pageBtn.dataset.page);
+        })
+    )
+
+    const nextBtn = document.getElementById('next-btn');
+
 })
 
 function buildStudentForm() {
@@ -18,9 +29,10 @@ function buildStudentForm() {
     studentFormComponent.innerHTML = StudentFormComponent();
 }
 
-function buildStudentTable() {
+function buildStudentTable(page) {
     const studentTableComponent = document.getElementsByTagName('studenttablecomponent')[0];
-    studentTableComponent.appendChild(StudentTableComponent());
+    studentTableComponent.innerHTML = '';
+    studentTableComponent.appendChild(StudentTableComponent(page));
 }
 
 function addStudent(event, studentForm) {
@@ -206,8 +218,6 @@ function deleteStudentCb(deleteBtn) {
     studentsRow.innerHTML = "";
 
     // Rerender the table
-    const studentTableComponent = document.getElementsByTagName('studenttablecomponent')[0];
-    studentTableComponent.innerHTML = '';
     buildStudentTable();
 
     const deleteStudent = JSON.parse(localStorage.getItem('delete-student'));
