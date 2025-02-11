@@ -2,8 +2,6 @@ import { updateStudentCb, deleteStudentCb } from '../index.js';
 import { PaginationComponent } from "./pagination_component.js";
 
 function StudentTableComponent(page = 1) {
-    console.log("Page click:", page);
-    
     const studentTable = document.createElement('table');
     studentTable.className = 'table';
     studentTable.innerHTML = `
@@ -28,7 +26,6 @@ function StudentTableComponent(page = 1) {
     // Get all students from local storage
     const localStudents = (localStorage.getItem('students')) ? JSON.parse(localStorage.getItem('students')) : {};
     const studentCount = (localStudents) ? Object.keys(localStudents).length : 0;
-    console.log("Student count:", studentCount);
 
     const tfoot = document.createElement('tfoot');
     tfoot.innerHTML = `
@@ -49,18 +46,9 @@ function StudentTableComponent(page = 1) {
         endIndex = studentsArr.length;
     }
 
-    console.log(startIndex, endIndex);
-
     for (let i = startIndex; i < endIndex; i++) {
         tbody.append(studentRow(i + 1, studentsArr[i][0], studentsArr[i][1]));
     }
-
-    // let count = 1;
-
-    // for (let studentKey in localStudents) {
-    //     tbody.append(studentRow(count, studentKey, localStudents[studentKey]));
-    //     count++;
-    // }
 
     return studentTable;
 }

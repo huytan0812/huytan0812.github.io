@@ -2,16 +2,29 @@ import { StudentFormComponent } from './components/student_form.js';
 import { StudentTableComponent, studentRow, getAverageScore} from './components/student_table_component.js';
 
 document.addEventListener("DOMContentLoaded", function index() {
-    // Build Student Form
     buildStudentForm();
-
-    // Display all Student
+    
     buildStudentTable();
 
     const studentForm = document.forms["student-form"];
     studentForm.addEventListener("submit", (event) => addStudent(event, studentForm));
 
+    const searchForm = document.forms["search-form"];
+    searchForm.addEventListener("submit", (event) => search(event));
+})
+
+function buildStudentForm() {
+    const studentFormComponent = document.getElementsByTagName('studentformcomponent')[0];
+    studentFormComponent.innerHTML = StudentFormComponent();
+}
+
+function buildStudentTable(page = 1) {
+    const studentTableComponent = document.getElementsByTagName('studenttablecomponent')[0];
+    studentTableComponent.innerHTML = '';
+    studentTableComponent.appendChild(StudentTableComponent(page));
+
     const prevBtn = document.getElementById('prev-btn');
+    prevBtn.addEventListener("click", () => buildStudentTable(page - 1));
 
     const pageBtns = document.querySelectorAll('.page-btn');
     pageBtns.forEach(
@@ -21,27 +34,12 @@ document.addEventListener("DOMContentLoaded", function index() {
     )
 
     const nextBtn = document.getElementById('next-btn');
-
-})
-
-function buildStudentForm() {
-    const studentFormComponent = document.getElementsByTagName('studentformcomponent')[0];
-    studentFormComponent.innerHTML = StudentFormComponent();
-}
-
-function buildStudentTable(page) {
-    const studentTableComponent = document.getElementsByTagName('studenttablecomponent')[0];
-    studentTableComponent.innerHTML = '';
-    studentTableComponent.appendChild(StudentTableComponent(page));
+    nextBtn.addEventListener("click", () => buildStudentTable(page + 1));
 }
 
 function addStudent(event, studentForm) {
-    // Add a new student form the form
-
     // Prevent the from from submiting
     event.preventDefault();
-
-    const students = document.getElementById('students-row');
 
     // Get all student info
     const studentFormInputs = studentForm.querySelectorAll("input");
@@ -84,16 +82,9 @@ function addStudent(event, studentForm) {
     localStorage.setItem('students', JSON.stringify(localStudents));
     localStorage.setItem('studentPK', JSON.stringify(studentPK));
     
-    // Append new student row
-    students.append(studentRow(studentCount + 1, nextStudentKey, newStudent));
-
-    // Add new Event Listener for new update Student btn
-    const newUpdateStudentBtn = document.getElementsByClassName('update-btn')[studentCount];
-    newUpdateStudentBtn.addEventListener("click", () => updateStudentCb(newUpdateStudentBtn));
-
-    // Add new Event Listener for new delete Student btn
-    const newDelStudentBtn = document.getElementsByClassName('delete-btn')[studentCount];
-    newDelStudentBtn.addEventListener("click", () => deleteStudentCb(newDelStudentBtn));
+    // Rerender the page
+    const newestPage = Math.floor(studentCount / 5) + 1;
+    buildStudentTable(newestPage);
 }
 
 function updateStudentCb(updateBtn) {
@@ -171,13 +162,9 @@ function updateStudentRow(studentKey, student) {
 function updateStudent(event) {
     const btn = event.target;
     const studentKey = btn.dataset.studentKey;
-
-    console.log(studentKey);
     
     const localStudents = JSON.parse(localStorage.getItem('students'));
     const student = localStudents[studentKey];
-
-    console.log(student);
 
     const studentForm = document.forms['student-form'];
     const studentInputs = studentForm.querySelectorAll('input');
@@ -219,9 +206,33 @@ function deleteStudentCb(deleteBtn) {
 
     // Rerender the table
     buildStudentTable();
+}
 
-    const deleteStudent = JSON.parse(localStorage.getItem('delete-student'));
-    console.log("Delete:", deleteStudent);
+function search(event) {
+    event.preventDefault();
+
+    const q = document.getElementById('search');
+    
+    const localStudents = JSON.parse(localStorage.getItem('students'));
+
+    const studentsArr = Object.entries(localStudents);
+
+    let result = "Học sinh không tồn tại";
+
+    for (let i = 0; i < studentsArr.length; i++) {
+        const student = studentsArr[i][1];
+        const studentName = student['name'];
+        
+        if (q.value == studentName) {
+            result = q.value;
+            break;
+        }
+    }
+
+    const searchResult = document.getElementById('search-result');
+    searchResult.innerHTML = `
+    <p style="text-align: center; font-weight: bold;" class="mt-2 mb-2">${ result }</p>
+    `;
 }
 
 export { updateStudentCb, deleteStudentCb };

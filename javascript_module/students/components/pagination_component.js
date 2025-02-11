@@ -1,6 +1,6 @@
 function PaginationComponent(studentCount, page) {
     const STUDENTS_PER_PAGE = 5;
-    const pages = Math.floor(studentCount / STUDENTS_PER_PAGE) + 1;
+    const pages = (studentCount % STUDENTS_PER_PAGE != 0) ? Math.floor(studentCount / STUDENTS_PER_PAGE) + 1 : Math.floor(studentCount / STUDENTS_PER_PAGE);
 
     return `
     <nav aria-label="Page navigation example">
