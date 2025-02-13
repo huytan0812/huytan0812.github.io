@@ -1,0 +1,5 @@
+**Handle uploading fruit**:
+- Fields: name, description, images, main image
+- Upload images to gg drive
+**Handle rendering fruit**:
+- Render fruit function idea as a template like Django template

@@ -17,7 +17,7 @@ function StudentTableComponent(page = 1) {
         <th scope="col">Hành động</th>
         </tr>
     </thead>
-    `
+    `;
 
     const tbody = document.createElement('tbody');
     tbody.setAttribute('id', 'students-row');
@@ -38,6 +38,9 @@ function StudentTableComponent(page = 1) {
     studentTable.append(tfoot);
 
     const studentsArr = Object.entries(localStudents);
+
+    const newestStudent = (studentsArr.length != 0) ? studentsArr.pop() : {};
+    studentsArr.unshift(newestStudent);
 
     let endIndex = page * 5;
     let startIndex = endIndex - 5;

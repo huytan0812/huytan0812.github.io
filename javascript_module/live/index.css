@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 62.5%;
+}
+
+p, a, li {
+    font-size: 1.5rem;
+}
+
+#left-sidebar {
+    width: 35%;
+}
+
+#right-sidebar {
+    width: 65%;
+}

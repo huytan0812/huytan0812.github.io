@@ -3,7 +3,7 @@ import { StudentTableComponent, studentRow, getAverageScore} from './components/
 
 document.addEventListener("DOMContentLoaded", function index() {
     buildStudentForm();
-    
+
     buildStudentTable();
 
     const studentForm = document.forms["student-form"];
@@ -81,10 +81,10 @@ function addStudent(event, studentForm) {
 
     localStorage.setItem('students', JSON.stringify(localStudents));
     localStorage.setItem('studentPK', JSON.stringify(studentPK));
+    localStorage.setItem('newStudentKey', JSON.stringify(nextStudentKey));
     
     // Rerender the page
-    const newestPage = Math.floor(studentCount / 5) + 1;
-    buildStudentTable(newestPage);
+    buildStudentTable();
 }
 
 function updateStudentCb(updateBtn) {
