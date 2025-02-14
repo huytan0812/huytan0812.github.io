@@ -19,7 +19,7 @@ function fruits(fruitsArr) {
         fruit = fruitsArr[i];
 
         fruitRows += `
-        <p class="left-sidebar-title pt-2 pb-2">${ Object.values(fruit)[0]['name'] }</p>
+        <p class="left-sidebar-title pt-2 pb-2" data-fruitpk=${ Object.keys(fruit)[0] }>${ Object.values(fruit)[0]['name'] }</p>
         `;
 
     }

@@ -2,22 +2,23 @@ import { MenuComponent } from "./components/menu_component.js";
 import { LeftSidebarComponent } from "./components/left_sidebar_component.js";
 import { RightSidebarComponent } from "./components/right_sidebar_component.js";
 import { FruitFormComponent } from "./components/fruit_form.js";
+import { FruitDetailComponent } from "./components/fruit_detail_component.js";
 
 const fruitsArr = [
     {
-        'kiwi': {
+        '1': {
             'name': "kiwi",
             'description': "Kiwi là trái cây màu xanh"
         }
     },
     {
-        'mango': {
+        '2': {
             'name': "mango",
             'description': "Xoài là trái cây nhiệt đới"
         }
     },
     {
-        'dragon_fruit': {
+        '3': {
             'name': "dragon fruit",
             'description': "Thanh long là trái cây nhiệt đới"
         }
@@ -28,15 +29,14 @@ let renderFruit;
 
 document.addEventListener("DOMContentLoaded", function() {
     const menuComponent = document.getElementsByTagName('menucomponent')[0];
-    const leftSidebarComponent = document.getElementsByTagName('leftsidebar')[0];
     const rightSidebarComponent = document.getElementsByTagName('rightsidebar')[0];
 
+    renderLeftSidebar();
     menuComponent.innerHTML = MenuComponent();
-    leftSidebarComponent.innerHTML = LeftSidebarComponent();
     rightSidebarComponent.innerHTML = RightSidebarComponent();
 
     const newFruit = {
-        'banana': {
+        '4': {
             'name': 'banana',
             'description': "Chuối là trái cây nhiệt đới"
         }
@@ -53,7 +53,12 @@ function renderLeftSidebar() {
     const leftSidebarComponent = document.getElementsByTagName('leftsidebar')[0];
     leftSidebarComponent.innerHTML = LeftSidebarComponent();
 
-    const fruitTitles = leftSidebarComponent.querySelectorAll()
+    const fruitTitles = leftSidebarComponent.querySelectorAll('.left-sidebar-title');
+    fruitTitles.forEach(
+        (fruit) => {
+            fruit.addEventListener("click", () => fruitDetail(fruit.dataset.fruitpk));
+        }
+    )
 }
 
 function renderFruitForm() {
@@ -76,6 +81,24 @@ function addFruit(event) {
     const form = event.currentTarget;
 
     console.log(form);
+}
+
+function fruitDetail(fruitPK) {
+    const fruitsArr = JSON.parse(localStorage.getItem('fruits'));
+    let fruit;
+    let fruitKey;
+
+    const rightSidebarComponent = document.getElementsByTagName('rightsidebar')[0];
+
+    for (let i = 0; i < fruitsArr.length; i++) {
+        fruit = fruitsArr[i];
+        fruitKey = Object.keys(fruit)[0];
+
+        if (fruitKey == fruitPK) {
+            rightSidebarComponent.innerHTML = FruitDetailComponent(fruit[fruitPK]['name']);
+        }
+    }
+
 }
 
 export { fruitsArr };
