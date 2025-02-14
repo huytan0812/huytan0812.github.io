@@ -1,6 +1,7 @@
 import { MenuComponent } from "./components/menu_component.js";
 import { LeftSidebarComponent } from "./components/left_sidebar_component.js";
 import { RightSidebarComponent } from "./components/right_sidebar_component.js";
+import { FruitFormComponent } from "./components/fruit_form.js";
 
 const fruitsArr = [
     {
@@ -23,6 +24,8 @@ const fruitsArr = [
     }
 ]
 
+let renderFruit;
+
 document.addEventListener("DOMContentLoaded", function() {
     const menuComponent = document.getElementsByTagName('menucomponent')[0];
     const leftSidebarComponent = document.getElementsByTagName('leftsidebar')[0];
@@ -41,5 +44,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
     fruitsArr.unshift(newFruit);
     localStorage.setItem('fruits', JSON.stringify(fruitsArr));
+
+    const fruitFormBtn = document.getElementById('fruit-form-btn');
+    fruitFormBtn.addEventListener("click", () => renderFruitForm());
 })
+
+function renderLeftSidebar() {
+    const leftSidebarComponent = document.getElementsByTagName('leftsidebar')[0];
+    leftSidebarComponent.innerHTML = LeftSidebarComponent();
+
+    const fruitTitles = leftSidebarComponent.querySelectorAll()
+}
+
+function renderFruitForm() {
+    const rightSidebarComponent = document.getElementsByTagName('rightsidebar')[0];
+    rightSidebarComponent.innerHTML = FruitFormComponent();
+
+    const fruitForm = document.forms["fruit-form"];
+    fruitForm.addEventListener("submit", addFruit);
+
+    const cancelFruitForm = document.getElementById('cancel-fruit-form');
+    cancelFruitForm.addEventListener("click", () => {
+        rightSidebarComponent.innerHTML = RightSidebarComponent();
+    }
+    );
+}
+
+function addFruit(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+
+    console.log(form);
+}
+
+export { fruitsArr };
 

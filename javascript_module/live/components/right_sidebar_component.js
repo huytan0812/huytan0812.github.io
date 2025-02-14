@@ -1,6 +1,6 @@
 function RightSidebarComponent() {
     return `
-    <div id="right-sidebar">
+    <div class="ps-3 mt-2">
         <p>Right sidebar</p>
     </div>
     `;

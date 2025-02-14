@@ -21,12 +21,37 @@ p, a, li {
     font-size: 1.5rem !important;
 }
 
-leftsidebar {
-    width: 32%;
-    position: sticky;
-    top: 0;
+.left-sidebar-title {
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-rightsidebar {
+.left-sidebar-title:hover {
+    background-color: blueviolet;
+    color: white;
+    transition: 0.3s;
+}
+
+#main-content {
+    height: 100vh;
+}
+
+#form-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+#left-sidebar {
+    width: 35%;
+    position: sticky;
+    border-right: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+#right-sidebar {
     width: 65%;
+}
+
+#fruit-form-btn {
+    width: 100%;
 }
