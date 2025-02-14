@@ -9,10 +9,24 @@ p, a, li {
     font-size: 1.5rem;
 }
 
-#left-sidebar {
-    width: 35%;
+.navbar-brand {
+    font-size: 2rem !important;
 }
 
-#right-sidebar {
+.form-control {
+    font-size: 1.5rem !important;  
+}
+
+.btn {
+    font-size: 1.5rem !important;
+}
+
+leftsidebar {
+    width: 32%;
+    position: sticky;
+    top: 0;
+}
+
+rightsidebar {
     width: 65%;
 }
