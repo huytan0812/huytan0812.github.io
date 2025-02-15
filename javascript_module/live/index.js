@@ -27,6 +27,20 @@ const fruitsArr = [
 
 let renderFruit;
 
+const fruitNamesFn = () => {
+    let fruitNames = [];
+    let fruit;
+    let fruitName;
+
+    for (let i = 0; i < fruitsArr.length; i++) {
+        fruit = fruitsArr[i];
+        fruitName = Object.values(fruit)[0]['name'];
+        fruitNames.push(fruitName);
+    }
+
+    return fruitNames;
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const menuComponent = document.getElementsByTagName('menucomponent')[0];
     const rightSidebarComponent = document.getElementsByTagName('rightsidebar')[0];
@@ -47,6 +61,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const fruitFormBtn = document.getElementById('fruit-form-btn');
     fruitFormBtn.addEventListener("click", () => renderFruitForm());
+
+    let fruitNames = fruitNamesFn();
+    
+    const searchForm = document.forms['search-form'];
+    searchForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const search = searchForm.getElementsByTagName('input')[0];
+        const value = search.value;
+
+        for (let i = 0; i < fruitNames.length; i++) {
+            if (fruitNames[i] == value) {
+                console.log(fruitNames[i]);
+                break;
+            }
+        }
+    })
 })
 
 function renderLeftSidebar() {

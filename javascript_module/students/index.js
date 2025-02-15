@@ -29,7 +29,7 @@ function buildStudentTable(page = 1) {
     const pageBtns = document.querySelectorAll('.page-btn');
     pageBtns.forEach(
         (pageBtn) => pageBtn.addEventListener("click", () => {
-            buildStudentTable(pageBtn.dataset.page);
+            buildStudentTable(parseInt(pageBtn.dataset.page));
         })
     )
 
