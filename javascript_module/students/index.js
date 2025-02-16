@@ -18,23 +18,23 @@ function buildStudentForm() {
     studentFormComponent.innerHTML = StudentFormComponent();
 }
 
-function buildStudentTable(page = 1) {
+function buildStudentTable(queryset = (localStorage.getItem('students')) ? JSON.parse(localStorage.getItem('students')) : {}, page = 1) {
     const studentTableComponent = document.getElementsByTagName('studenttablecomponent')[0];
     studentTableComponent.innerHTML = '';
-    studentTableComponent.appendChild(StudentTableComponent(page));
+    studentTableComponent.appendChild(StudentTableComponent(queryset, page));
 
     const prevBtn = document.getElementById('prev-btn');
-    prevBtn.addEventListener("click", () => buildStudentTable(page - 1));
+    prevBtn.addEventListener("click", () => buildStudentTable(queryset, page - 1));
 
     const pageBtns = document.querySelectorAll('.page-btn');
     pageBtns.forEach(
         (pageBtn) => pageBtn.addEventListener("click", () => {
-            buildStudentTable(parseInt(pageBtn.dataset.page));
+            buildStudentTable(queryset, parseInt(pageBtn.dataset.page));
         })
     )
 
     const nextBtn = document.getElementById('next-btn');
-    nextBtn.addEventListener("click", () => buildStudentTable(page + 1));
+    nextBtn.addEventListener("click", () => buildStudentTable(queryset, page + 1));
 }
 
 function addStudent(event, studentForm) {
@@ -217,22 +217,54 @@ function search(event) {
 
     const studentsArr = Object.entries(localStudents);
 
-    let result = "Học sinh không tồn tại";
+    const value = q.value.trim().toLowerCase();
 
-    for (let i = 0; i < studentsArr.length; i++) {
-        const student = studentsArr[i][1];
-        const studentName = student['name'];
-        
-        if (q.value == studentName) {
-            result = q.value;
-            break;
+    const searchResults = () => {
+        let matchResults = {};
+        let student;
+        let studentName;
+
+        for (let i = 0; i < studentsArr.length; i++) {
+            student = studentsArr[i];
+            studentName = student[1]['name'];
+
+            if (student[1]['name'].toLowerCase().indexOf(value) != -1) {
+                matchResults[student[0]] = student[1];
+            }
         }
+        
+        return matchResults;
     }
 
-    const searchResult = document.getElementById('search-result');
-    searchResult.innerHTML = `
-    <p style="text-align: center; font-weight: bold;" class="mt-2 mb-2">${ result }</p>
-    `;
+    const results = searchResults();
+
+    if (Object.keys(results).length == 0) {
+        const searchResult = document.getElementsByTagName('studenttablecomponent')[0];
+        searchResult.innerHTML = `
+        <p style="color: red; text-align: center; font-weight: bold;">Không tồn tại học sinh</p>
+        <p style="text-align: center;">
+            <button type="button" class="btn btn-outline-dark" id="cancel-search-result">
+                Huỷ
+            </button>
+        </p>
+        `;
+
+        const cancelSearchResult = document.getElementById('cancel-search-result');
+        cancelSearchResult.addEventListener("click", () => {
+            // Rerender student table by default
+            buildStudentTable();
+        })
+    }
+    else {
+        buildStudentTable(results, 1);
+        const resetTable = document.getElementById('reset-table');
+        resetTable.parentElement.style.display = 'block';
+        resetTable.addEventListener("click", () => {
+            resetTable.parentElement.style.display = 'none';
+            // Rerender student table by default
+            buildStudentTable();
+        })
+    }
 }
 
 export { updateStudentCb, deleteStudentCb };

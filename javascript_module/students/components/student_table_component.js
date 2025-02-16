@@ -1,7 +1,7 @@
 import { updateStudentCb, deleteStudentCb } from '../index.js';
 import { PaginationComponent } from "./pagination_component.js";
 
-function StudentTableComponent(page = 1) {
+function StudentTableComponent(queryset, page) {
     const studentTable = document.createElement('table');
     studentTable.className = 'table';
     studentTable.innerHTML = `
@@ -24,8 +24,10 @@ function StudentTableComponent(page = 1) {
     studentTable.append(tbody);
 
     // Get all students from local storage
-    const localStudents = (localStorage.getItem('students')) ? JSON.parse(localStorage.getItem('students')) : {};
-    const studentCount = (localStudents) ? Object.keys(localStudents).length : 0;
+    const localStudents = queryset;
+    const studentCount = Object.keys(localStudents).length;
+
+    console.log("Keys:", studentCount);
 
     const tfoot = document.createElement('tfoot');
     tfoot.innerHTML = `
@@ -37,10 +39,7 @@ function StudentTableComponent(page = 1) {
     `;
     studentTable.append(tfoot);
 
-    const studentsArr = Object.entries(localStudents);
-
-    const newestStudent = (studentsArr.length != 0) ? studentsArr.pop() : {};
-    studentsArr.unshift(newestStudent);
+    const studentsArr = (studentCount != 0) ? Object.entries(localStudents).reverse() : [];
 
     let endIndex = page * 5;
     let startIndex = endIndex - 5;
