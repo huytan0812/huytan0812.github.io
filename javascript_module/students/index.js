@@ -85,6 +85,9 @@ function addStudent(event, studentForm) {
     
     // Rerender the page
     buildStudentTable();
+
+    // Rerender the form
+    buildStudentForm();
 }
 
 function updateStudentCb(updateBtn) {
@@ -206,6 +209,9 @@ function deleteStudentCb(deleteBtn) {
 
     // Rerender the table
     buildStudentTable();
+
+    // Rerender the form
+    buildStudentForm();
 }
 
 function search(event) {
