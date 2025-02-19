@@ -1,5 +1,6 @@
 import { StudentFormComponent } from './components/student_form.js';
 import { StudentTableComponent, studentRow, getAverageScore} from './components/student_table_component.js';
+import { DeleteModalComponent } from './components/delete_modal.js';
 
 document.addEventListener("DOMContentLoaded", function index() {
     buildStudentForm();
@@ -191,8 +192,19 @@ function updateStudent(event) {
     updateStudentRow(studentKey, student);
 }
 
-function deleteStudentCb(deleteBtn) {
+function displayDeleteModal(deleteBtn) {
     const studentKey = deleteBtn.dataset.deleteStudent;
+    console.log("Deleting:", studentKey);
+
+    const body = document.body;
+    const deleteModalContainer = document.createElement('div');
+    deleteModalContainer.innerHTML = DeleteModalComponent();
+
+    body.appendChild(deleteModalContainer);
+    console.log(body);
+}
+
+function deleteStudentCb(studentKey) {
     console.log("Deleting student:", studentKey);
     const student = getStudentInfo(studentKey);
     localStorage.setItem('delete-student', JSON.stringify(student));
@@ -273,4 +285,4 @@ function search(event) {
     }
 }
 
-export { updateStudentCb, deleteStudentCb };
+export { updateStudentCb, deleteStudentCb, displayDeleteModal };

@@ -54,3 +54,9 @@ h2 {
 #update-btns {
     display: none;
 }
+
+#delete-modal {
+    opacity: 1;
+    display: block; 
+    background-color: rgba(0, 0, 0, 0.24);
+}

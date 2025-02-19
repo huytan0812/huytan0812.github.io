@@ -1,4 +1,4 @@
-import { updateStudentCb, deleteStudentCb } from '../index.js';
+import { updateStudentCb, deleteStudentCb, displayDeleteModal } from '../index.js';
 import { PaginationComponent } from "./pagination_component.js";
 
 function StudentTableComponent(queryset, page) {
@@ -89,7 +89,7 @@ function studentRow(count, studentKey, studentInfo) {
     const updateBtn = action.getElementsByClassName('update-btn')[0];
     const deleteBtn = action.getElementsByClassName('delete-btn')[0];
     updateBtn.addEventListener("click", () => updateStudentCb(updateBtn));
-    deleteBtn.addEventListener("click", () => deleteStudentCb(deleteBtn));
+    deleteBtn.addEventListener("click", () => displayDeleteModal(deleteBtn));
 
     return tr;
 }
