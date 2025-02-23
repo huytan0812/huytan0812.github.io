@@ -194,18 +194,31 @@ function updateStudent(event) {
 
 function displayDeleteModal(deleteBtn) {
     const studentKey = deleteBtn.dataset.deleteStudent;
-    console.log("Deleting:", studentKey);
 
     const body = document.body;
     const deleteModalContainer = document.createElement('div');
     deleteModalContainer.innerHTML = DeleteModalComponent();
 
     body.appendChild(deleteModalContainer);
-    console.log(body);
+    const deleteModal = document.getElementById('delete-modal');
+    deleteModal.style.display = 'block';
+
+    const dismissDeleteModal = document.getElementById('dismiss-delete-modal');
+    const approveDeleteStudent = document.getElementById("approve-delete-student");
+
+    dismissDeleteModal.addEventListener("click", () => {
+        deleteModalContainer.remove();
+    })
+
+    approveDeleteStudent.addEventListener("click", () => {
+        deleteModalContainer.remove();
+        deleteStudentCb(studentKey);
+    }
+    );
 }
 
 function deleteStudentCb(studentKey) {
-    console.log("Deleting student:", studentKey);
+    console.log("Delete student:", studentKey);
     const student = getStudentInfo(studentKey);
     localStorage.setItem('delete-student', JSON.stringify(student));
 
