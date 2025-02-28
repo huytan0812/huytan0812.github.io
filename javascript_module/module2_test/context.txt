@@ -1,0 +1,11 @@
+1. Todo App:
+- Components:
++) 1 main component that render only one of these components at a same time:
+all_tasks, active_tasks, completed_tasks
++) all_tasks: display both incompleted tasks and completed tasks, incompleted tasks will be display first.
+Any completed tasks will be render with a checked radio checkbox.
+We can add or delete incompleted or completed tasks from this component
++) active_tasks: display only incompleted tasks.
+We can add or delete incompleted tasks from this component
++) completed_tasks: display only completed tasks.
+We can only delete completed tasks from this components
