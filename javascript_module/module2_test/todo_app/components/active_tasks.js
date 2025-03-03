@@ -3,7 +3,7 @@ function ActiveTaskComponent() {
     <p>
         Active Task Component
     </p>
-    `
+    `;
 }
 
 export { ActiveTaskComponent };
