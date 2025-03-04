@@ -6,7 +6,11 @@
   margin: 0;
 }
 
-#root {
+#banner {
+  background: url("/pietro-de-grandi-T7K4aEPoGGk-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   width: 100vw;
-  height: 100vh;
+  height: 60vh;
 }
