@@ -3,7 +3,7 @@ import { ActiveTaskComponent } from "./components/active_tasks.js"
 import { CompletedTaskComponent } from "./components/completed_tasks.js";
 import { AddTaskComponent } from "./components/add_task.js";
 
-let TASKS_TO_DISPLAY = {};
+let TASKS_TO_DISPLAY = [];
 
 document.addEventListener("DOMContentLoaded", function index() {
     const addTC = document.getElementsByTagName('addtaskcomponent')[0];
@@ -14,34 +14,32 @@ document.addEventListener("DOMContentLoaded", function index() {
     const tasks = (LStasks) ? LStasks : {};
     const displayTasks = document.getElementById('display-tasks');
 
-    // Default render All task component
-    displayTasks.innerHTML = AllTaskComponent();
-
     // Default display tasks in All task component
     const allTasks = () => {
         let incompletedTasks = [];
         let completedTasks = [];
-        let task;
 
         for (let key in tasks) {
-            task = tasks[key];
-            if (task["incompleted"]) {
-                incompletedTasks.push(task);
+            let task = {};
+            task[key] = tasks[key];
+
+            if (task[key]["incompleted"]) {
+                incompletedTasks.unshift(task);
             }
             else {
-                completedTasks.push(task);
+                completedTasks.unshift(task);
             }
         }
 
-        return {
-            'incompletedTasks': incompletedTasks,
-            'completedTasks': completedTasks
-        };
+        const result = incompletedTasks.concat(completedTasks);
+
+        return result;
     }
 
     TASKS_TO_DISPLAY = allTasks();
 
-    console.log(TASKS_TO_DISPLAY);
+    // Default render All task component
+    displayTasks.innerHTML = AllTaskComponent(TASKS_TO_DISPLAY);
 
     const allBtn = document.getElementById('all');
     allBtn.addEventListener("click", function() {
@@ -97,7 +95,16 @@ document.addEventListener("DOMContentLoaded", function index() {
     const addTaskForm = document.forms["add-task"];
     addTaskForm.addEventListener("submit", (event) => {
         event.preventDefault();
-        addTask(addTaskForm);
+        const newTask = addTask(addTaskForm);
+        const firstTask = displayTasks.firstElementChild;
+        const newTaskRow = document.createElement('p');
+        newTaskRow.innerHTML = `
+        <input class="form-check-input" type="checkbox" value="" id="${ newTask['key'] }">
+        <label class="form-check-label ps-2" for="${ newTask['key'] }">
+            ${ newTask['task']["name"] }
+        </label>
+        `;
+        displayTasks.insertBefore(newTaskRow, firstTask);
     })
 })
 
@@ -118,11 +125,11 @@ function addTask(form) {
 
     // Save to local storage
     localStorage.setItem("tasks", JSON.stringify(tasks));
-}
 
-function displayTasksFn(allTasks = {}) {
-    console.log("Incompleted tasks:", allTasks["incompletedTasks"]);
-    console.log("Completed tasks:", allTasks["completedTasks"]);
+    return {
+        'key': taskKey,
+        'task': newTask
+    };
 }
 
 export { TASKS_TO_DISPLAY };

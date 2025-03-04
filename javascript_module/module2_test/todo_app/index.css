@@ -9,7 +9,7 @@ h1 {
     text-align: center;
 }
 
-p, a {
+p, a, s {
     font-size: 1.5rem;
 }
 
@@ -23,6 +23,13 @@ p, a {
     max-width: 1200px;
     border-bottom: 1px solid gray;
     border-radius: 2px;
+}
+
+#display-tasks {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: start;
 }
 
 .btn-components {
@@ -43,5 +50,13 @@ p, a {
 }
 
 .btn {
+    font-size: 1.5rem !important;
+}
+
+.form-check-input {
+    font-size: 1.5rem !important;
+}
+
+.form-check-label {
     font-size: 1.5rem !important;
 }
