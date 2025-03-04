@@ -3,21 +3,77 @@ import { ActiveTaskComponent } from "./components/active_tasks.js"
 import { CompletedTaskComponent } from "./components/completed_tasks.js";
 import { AddTaskComponent } from "./components/add_task.js";
 
+let TASKS_TO_DISPLAY = {};
+
 document.addEventListener("DOMContentLoaded", function index() {
     const addTC = document.getElementsByTagName('addtaskcomponent')[0];
     addTC.innerHTML = AddTaskComponent();
     
+    // Get local storage tasks
+    const LStasks = JSON.parse(localStorage.getItem("tasks"));
+    const tasks = (LStasks) ? LStasks : {};
     const displayTasks = document.getElementById('display-tasks');
 
     // Default render All task component
     displayTasks.innerHTML = AllTaskComponent();
 
+    // Default display tasks in All task component
+    const allTasks = () => {
+        let incompletedTasks = [];
+        let completedTasks = [];
+        let task;
+
+        for (let key in tasks) {
+            task = tasks[key];
+            if (task["incompleted"]) {
+                incompletedTasks.push(task);
+            }
+            else {
+                completedTasks.push(task);
+            }
+        }
+
+        return {
+            'incompletedTasks': incompletedTasks,
+            'completedTasks': completedTasks
+        };
+    }
+
+    TASKS_TO_DISPLAY = allTasks();
+
+    console.log(TASKS_TO_DISPLAY);
+
     const allBtn = document.getElementById('all');
     allBtn.addEventListener("click", function() {
+        // Switch to current component
         currentActive.classList.remove("active-component");
         displayTasks.innerHTML = AllTaskComponent();
         currentActive = allBtn;
         currentActive.classList.add("active-component");
+
+        // Display tasks
+        const tasksToDisplay = () => {
+            let incompletedTasks = [];
+            let completedTasks = [];
+            let task;
+
+            for (let key in tasks) {
+                task = tasks[key];
+                if (task["incompleted"]) {
+                    incompletedTasks.push(task);
+                }
+                else {
+                    completedTasks.push(task);
+                }
+            }
+
+            return {
+                'incompletedTasks': incompletedTasks,
+                'completedTasks': completedTasks
+            };
+        }
+
+        TASKS_TO_DISPLAY = tasksToDisplay();
     })
 
     let currentActive = allBtn;
@@ -63,3 +119,10 @@ function addTask(form) {
     // Save to local storage
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+function displayTasksFn(allTasks = {}) {
+    console.log("Incompleted tasks:", allTasks["incompletedTasks"]);
+    console.log("Completed tasks:", allTasks["completedTasks"]);
+}
+
+export { TASKS_TO_DISPLAY };
