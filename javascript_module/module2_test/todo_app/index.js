@@ -41,14 +41,27 @@ document.addEventListener("DOMContentLoaded", function index() {
     // Default render All task component
     displayTasks.innerHTML = AllTaskComponent(TASKS_TO_DISPLAY);
 
+    // Default Attach event handler for every checkbox
+    const taskCheckboxes = document.querySelectorAll('.task-checkbox');
+    if (taskCheckboxes.length != 0) {
+        taskCheckboxes.forEach(
+            (checkbox) => checkbox.addEventListener("change", (event) => {
+                const target = event.target;
+                const taskKey = target.dataset.taskKey;
+                const tasks = JSON.parse(localStorage.getItem("tasks"));
+
+                if (tasks.hasOwnProperty(taskKey)) {
+                    (target.checked) ? complete(target, tasks) : incomplete(target, tasks);
+                }
+            })
+        )
+    }
+
+    // All Tasks Component
     const allBtn = document.getElementById('all');
     allBtn.addEventListener("click", function() {
         // Switch to current component
         currentActive.classList.remove("active-component");
-
-        
-        LStasks = JSON.parse(localStorage.getItem("tasks"));
-        tasks = (LStasks) ? LStasks : {};
 
         // Display tasks
         const tasksToDisplay = () => {
@@ -82,13 +95,11 @@ document.addEventListener("DOMContentLoaded", function index() {
 
     let currentActive = allBtn;
 
+    // Active Tasks Component
     const activeBtn = document.getElementById('active');
     activeBtn.addEventListener("click", function() {
         // Switch to current component
         currentActive.classList.remove("active-component");
-
-        LStasks = JSON.parse(localStorage.getItem("tasks"));
-        tasks = (LStasks) ? LStasks : {};
 
         // Display only incompleted tasks
         const tasksToDisplay = () => {
@@ -113,12 +124,10 @@ document.addEventListener("DOMContentLoaded", function index() {
         currentActive.classList.add("active-component");
     })
 
+    // Incompleted Tasks Component
     const completedBtn = document.getElementById('completed');
     completedBtn.addEventListener("click", function() {
         currentActive.classList.remove("active-component");
-
-        LStasks = JSON.parse(localStorage.getItem("tasks"));
-        tasks = (LStasks) ? LStasks : {};
 
         // Display only incompleted tasks
         const tasksToDisplay = () => {
@@ -128,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function index() {
                 let task = {};
                 task[key] = tasks[key];
 
-                if (task[key]["incompleted"]) {
+                if (!task[key]["incompleted"]) {
                     incompletedTasks.unshift(task);
                 }
             }
@@ -148,6 +157,9 @@ document.addEventListener("DOMContentLoaded", function index() {
     addTaskForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const newTask = addTask(addTaskForm);
+
+        // Update tasks after adding new task
+        tasks = JSON.parse(localStorage.getItem("tasks"));
 
         // Hanlde after adding new task to local storage
         const firstTask = displayTasks.firstElementChild;
@@ -180,10 +192,45 @@ function addTask(form) {
     // Save to local storage
     localStorage.setItem("tasks", JSON.stringify(tasks));
 
+    // Clear the field
+    form.elements["task"].value = "";
+
     return {
         'key': taskKey,
         'task': newTask
     };
+}
+
+function attachCheckboxHandler() {
+    
+}
+
+function complete(checkbox, tasks) {
+    const taskKey = checkbox.dataset.taskKey;
+    const label = checkbox.nextElementSibling;
+    const taskName = label.dataset.taskName;
+
+    label.innerHTML = `<s>${ taskName }</s><span style="color: green; font-size: 1.5rem;">Đánh dấu là đã hoàn thành</span>`;
+    tasks[taskKey]["incompleted"] = false;
+
+    console.log("Complete task:", taskKey);
+    
+    // Update to local storage
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function incomplete(checkbox, tasks) {
+    const taskKey = checkbox.dataset.taskKey;
+    const label = checkbox.nextElementSibling;
+    const taskName = label.dataset.taskName;
+
+    label.innerHTML = `${ taskName }`;
+    tasks[taskKey]["incompleted"] = true;
+
+    console.log("Incomplete task:", taskKey);
+
+    // Update to local storage
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 export { TASKS_TO_DISPLAY };
