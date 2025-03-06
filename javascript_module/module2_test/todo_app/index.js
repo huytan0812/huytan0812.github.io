@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function index() {
     addTC.innerHTML = AddTaskComponent();
     
     // Get local storage tasks
-    const LStasks = JSON.parse(localStorage.getItem("tasks"));
-    const tasks = (LStasks) ? LStasks : {};
+    let LStasks = JSON.parse(localStorage.getItem("tasks"));
+    let tasks = (LStasks) ? LStasks : {};
     const displayTasks = document.getElementById('display-tasks');
 
     // Default display tasks in All task component
@@ -45,40 +45,69 @@ document.addEventListener("DOMContentLoaded", function index() {
     allBtn.addEventListener("click", function() {
         // Switch to current component
         currentActive.classList.remove("active-component");
-        displayTasks.innerHTML = AllTaskComponent();
-        currentActive = allBtn;
-        currentActive.classList.add("active-component");
+
+        
+        LStasks = JSON.parse(localStorage.getItem("tasks"));
+        tasks = (LStasks) ? LStasks : {};
 
         // Display tasks
         const tasksToDisplay = () => {
             let incompletedTasks = [];
             let completedTasks = [];
-            let task;
-
+    
             for (let key in tasks) {
-                task = tasks[key];
-                if (task["incompleted"]) {
-                    incompletedTasks.push(task);
+                let task = {};
+                task[key] = tasks[key];
+    
+                if (task[key]["incompleted"]) {
+                    incompletedTasks.unshift(task);
                 }
                 else {
-                    completedTasks.push(task);
+                    completedTasks.unshift(task);
                 }
             }
-
-            return {
-                'incompletedTasks': incompletedTasks,
-                'completedTasks': completedTasks
-            };
+    
+            const result = incompletedTasks.concat(completedTasks);
+    
+            // return an array of tasks
+            return result;
         }
-
+    
         TASKS_TO_DISPLAY = tasksToDisplay();
+
+        displayTasks.innerHTML = AllTaskComponent();
+        currentActive = allBtn;
+        currentActive.classList.add("active-component");
     })
 
     let currentActive = allBtn;
 
     const activeBtn = document.getElementById('active');
     activeBtn.addEventListener("click", function() {
+        // Switch to current component
         currentActive.classList.remove("active-component");
+
+        LStasks = JSON.parse(localStorage.getItem("tasks"));
+        tasks = (LStasks) ? LStasks : {};
+
+        // Display only incompleted tasks
+        const tasksToDisplay = () => {
+            let incompletedTasks = [];
+
+            for (let key in tasks) {
+                let task = {};
+                task[key] = tasks[key];
+
+                if (task[key]["incompleted"]) {
+                    incompletedTasks.unshift(task);
+                }
+            }
+
+            return incompletedTasks;
+        }
+
+        TASKS_TO_DISPLAY = tasksToDisplay();
+
         displayTasks.innerHTML = ActiveTaskComponent();
         currentActive = activeBtn;
         currentActive.classList.add("active-component");
@@ -87,7 +116,30 @@ document.addEventListener("DOMContentLoaded", function index() {
     const completedBtn = document.getElementById('completed');
     completedBtn.addEventListener("click", function() {
         currentActive.classList.remove("active-component");
+
+        LStasks = JSON.parse(localStorage.getItem("tasks"));
+        tasks = (LStasks) ? LStasks : {};
+
+        // Display only incompleted tasks
+        const tasksToDisplay = () => {
+            let incompletedTasks = [];
+
+            for (let key in tasks) {
+                let task = {};
+                task[key] = tasks[key];
+
+                if (task[key]["incompleted"]) {
+                    incompletedTasks.unshift(task);
+                }
+            }
+
+            return incompletedTasks;
+        }
+
+        TASKS_TO_DISPLAY = tasksToDisplay();
+
         displayTasks.innerHTML = CompletedTaskComponent();
+
         currentActive = completedBtn;
         currentActive.classList.add("active-component");
     })
@@ -96,6 +148,8 @@ document.addEventListener("DOMContentLoaded", function index() {
     addTaskForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const newTask = addTask(addTaskForm);
+
+        // Hanlde after adding new task to local storage
         const firstTask = displayTasks.firstElementChild;
         const newTaskRow = document.createElement('p');
         newTaskRow.innerHTML = `
