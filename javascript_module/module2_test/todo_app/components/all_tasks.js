@@ -5,6 +5,7 @@ function AllTaskComponent() {
     let taskRow;
     let task;
     let taskKey;
+    
     for (let i = 0; i < TASKS_TO_DISPLAY.length; i++) {
         task = TASKS_TO_DISPLAY[i];
         taskKey = Object.keys(task)[0];
