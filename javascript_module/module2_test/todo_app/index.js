@@ -200,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function index() {
         for (let key of TASKS_TO_DELETE) {
             delete TASKS[key];
         }
+
         const deleteTaskCbs = document.querySelectorAll('.delete-task-checkbox');
         deleteTaskCbs.forEach(
             (checkbox) => {
@@ -208,7 +209,11 @@ document.addEventListener("DOMContentLoaded", function index() {
                 }
             }
         )
+
         deleteBtnTask.innerHTML = "Delete";
+        // Reset tasks to delete
+        TASKS_TO_DELETE = [];
+
         localStorage.setItem("tasks", JSON.stringify(TASKS));
     })
 })
@@ -216,9 +221,12 @@ document.addEventListener("DOMContentLoaded", function index() {
 function addTask(form) {
     const task = form.elements["task"].value;
 
-    const taskCount = Object.keys(TASKS).length;
+    const PK = JSON.parse(localStorage.getItem("PK"));
+    const currentKey = (PK) ? PK : 0;
 
-    const taskKey = `task_${taskCount + 1}`;
+    const nextKey = currentKey + 1;
+
+    const taskKey = `task_${nextKey}`;
     const newTask = {
         'name': task,
         'incompleted': true,
@@ -228,6 +236,7 @@ function addTask(form) {
 
     // Save to local storage
     localStorage.setItem("tasks", JSON.stringify(TASKS));
+    localStorage.setItem("PK", nextKey);
 
     // Clear the field
     form.elements["task"].value = "";
@@ -284,17 +293,25 @@ function incomplete(checkbox) {
 
 function attachDeleteTaskHandler() {
     const deleteTaskBtn = document.getElementById('delete-task-btn');
-    let taskCount = 0;
-
     const deleteTaskCbs = document.querySelectorAll('.delete-task-checkbox');
+
     deleteTaskCbs.forEach(
         (checkbox) => {
             checkbox.addEventListener("change", () => {
                 const taskKey = checkbox.dataset.taskKey;
                 if (TASKS.hasOwnProperty(taskKey)) {
-                    TASKS_TO_DELETE.push(taskKey);
-                    taskCount += 1;
-                    deleteTaskBtn.innerHTML = `Delete (${ taskCount })`;
+                    if (checkbox.checked) {
+                        TASKS_TO_DELETE.push(taskKey);
+                    }
+                    else {
+                        const undeletedTaskIndex = TASKS_TO_DELETE.indexOf(taskKey);
+
+                        // if found
+                        if (undeletedTaskIndex > -1) {
+                            TASKS_TO_DELETE.splice(undeletedTaskIndex, 1);
+                        }
+                    }
+                    deleteTaskBtn.innerHTML = `Delete (${ TASKS_TO_DELETE.length })`;
                 }
                 console.log(TASKS_TO_DELETE);
             })
