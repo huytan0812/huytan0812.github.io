@@ -32,6 +32,11 @@ p, a, s {
     align-items: start;
 }
 
+#delete-task {
+    display: flex;
+    justify-content: end;
+}
+
 .btn-components {
     font-size: 1.5rem;
     border: 0;

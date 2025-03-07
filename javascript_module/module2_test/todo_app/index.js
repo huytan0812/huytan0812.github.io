@@ -6,12 +6,20 @@ import { AddTaskComponent } from "./components/add_task.js";
 let LS_TASKS = JSON.parse(localStorage.getItem("tasks"));
 let TASKS = (LS_TASKS) ? LS_TASKS : {};
 let TASKS_TO_DISPLAY = [];
+let TASKS_TO_DELETE = [];
 
 document.addEventListener("DOMContentLoaded", function index() {
     const addTC = document.getElementsByTagName('addtaskcomponent')[0];
     addTC.innerHTML = AddTaskComponent();
+
+    const addTaskForm = document.forms["add-task"];
+    const deleteTask = document.getElementById('delete-task');
+    const deleteBtnTask = document.getElementById('delete-task-btn');
     
     const displayTasks = document.getElementById('display-tasks');
+    
+    // Default disable delete task
+    deleteTask.style.display = 'none';
 
     // Default display tasks in All task component
     const allTasks = () => {
@@ -41,25 +49,19 @@ document.addEventListener("DOMContentLoaded", function index() {
     displayTasks.innerHTML = AllTaskComponent(TASKS_TO_DISPLAY);
 
     // Default Attach event handler for every checkbox
-    const taskCheckboxes = document.querySelectorAll('.task-checkbox');
-    if (taskCheckboxes.length != 0) {
-        taskCheckboxes.forEach(
-            (checkbox) => checkbox.addEventListener("change", (event) => {
-                const target = event.target;
-                const taskKey = target.dataset.taskKey;
-
-                if (TASKS.hasOwnProperty(taskKey)) {
-                    (target.checked) ? complete(target) : incomplete(target);
-                }
-            })
-        )
-    }
+    attachCheckboxHandlerAll();
 
     // All Tasks Component
     const allBtn = document.getElementById('all');
     allBtn.addEventListener("click", function() {
         // Switch to current component
         currentActive.classList.remove("active-component");
+
+        // Enable add task form
+        addTaskForm.style.display = 'block';
+
+        // Disable delete task component
+        deleteTask.style.display = 'none';
 
         // Display tasks
         const tasksToDisplay = () => {
@@ -89,6 +91,8 @@ document.addEventListener("DOMContentLoaded", function index() {
         displayTasks.innerHTML = AllTaskComponent();
         currentActive = allBtn;
         currentActive.classList.add("active-component");
+
+        attachCheckboxHandlerAll();
     })
 
     let currentActive = allBtn;
@@ -98,6 +102,12 @@ document.addEventListener("DOMContentLoaded", function index() {
     activeBtn.addEventListener("click", function() {
         // Switch to current component
         currentActive.classList.remove("active-component");
+
+        // Enable add task form
+        addTaskForm.style.display = 'block';
+
+        // Disable delete task component
+        deleteTask.style.display = 'none';
 
         // Display only incompleted tasks
         const tasksToDisplay = () => {
@@ -120,11 +130,20 @@ document.addEventListener("DOMContentLoaded", function index() {
         displayTasks.innerHTML = ActiveTaskComponent();
         currentActive = activeBtn;
         currentActive.classList.add("active-component");
+
+        attachCheckboxHandlerAll();
     })
 
     // Incompleted Tasks Component
     const completedBtn = document.getElementById('completed');
     completedBtn.addEventListener("click", function() {
+        // Disable add task form
+        addTaskForm.style.display = 'none';
+
+        // Enable delete task component
+        deleteTask.style.display = 'flex';
+        deleteBtnTask.innerHTML = "Delete";
+
         currentActive.classList.remove("active-component");
 
         // Display only incompleted tasks
@@ -149,9 +168,10 @@ document.addEventListener("DOMContentLoaded", function index() {
 
         currentActive = completedBtn;
         currentActive.classList.add("active-component");
+
+        attachDeleteTaskHandler();
     })
 
-    const addTaskForm = document.forms["add-task"];
     addTaskForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const newTask = addTask(addTaskForm);
@@ -159,18 +179,37 @@ document.addEventListener("DOMContentLoaded", function index() {
         // Update tasks after adding new task
         TASKS = JSON.parse(localStorage.getItem("tasks"));
 
-        console.log(TASKS);
 
         // Hanlde after adding new task to local storage
         const firstTask = displayTasks.firstElementChild;
         const newTaskRow = document.createElement('p');
         newTaskRow.innerHTML = `
-        <input class="form-check-input" type="checkbox" value="" id="${ newTask['key'] }">
-        <label class="form-check-label ps-2" for="${ newTask['key'] }">
+        <input class="form-check-input task-checkbox" data-task-key="${ newTask['key'] }" type="checkbox" value="" id="${ newTask['key'] }">
+        <label class="form-check-label ps-2" data-task-name="${ newTask['task']["name"] }" for="${ newTask['key'] }">
             ${ newTask['task']["name"] }
         </label>
         `;
         displayTasks.insertBefore(newTaskRow, firstTask);
+
+        // Attach event handler to new check box
+        const checkbox = newTaskRow.getElementsByClassName('task-checkbox')[0];
+        attachCheckboxHandler(checkbox);
+    })
+
+    deleteBtnTask.addEventListener("click", () => {
+        for (let key of TASKS_TO_DELETE) {
+            delete TASKS[key];
+        }
+        const deleteTaskCbs = document.querySelectorAll('.delete-task-checkbox');
+        deleteTaskCbs.forEach(
+            (checkbox) => {
+                if (checkbox.checked) {
+                    checkbox.parentElement.remove();
+                }
+            }
+        )
+        deleteBtnTask.innerHTML = "Delete";
+        localStorage.setItem("tasks", JSON.stringify(TASKS));
     })
 })
 
@@ -199,9 +238,25 @@ function addTask(form) {
     };
 }
 
-function attachCheckboxHandler() {
-    
+function attachCheckboxHandlerAll() {
+    const taskCheckboxes = document.querySelectorAll('.task-checkbox');
+    if (taskCheckboxes.length != 0) {
+        taskCheckboxes.forEach(
+            (checkbox) => attachCheckboxHandler(checkbox)
+        )
+    }
 }
+
+function attachCheckboxHandler(checkbox) {
+    checkbox.addEventListener("change", (event) => {
+        const target = event.target;
+        const taskKey = target.dataset.taskKey;
+
+        if (TASKS.hasOwnProperty(taskKey)) {
+            (target.checked) ? complete(target) : incomplete(target);
+        }
+    })
+} 
 
 function complete(checkbox) {
     const taskKey = checkbox.dataset.taskKey;
@@ -210,11 +265,9 @@ function complete(checkbox) {
 
     label.innerHTML = `<s>${ taskName }</s><span style="color: green; font-size: 1.5rem;">Đánh dấu là đã hoàn thành</span>`;
     TASKS[taskKey]["incompleted"] = false;
-
-    console.log("Complete task:", taskKey);
     
     // Update to local storage
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(TASKS));
 }
 
 function incomplete(checkbox) {
@@ -225,10 +278,28 @@ function incomplete(checkbox) {
     label.innerHTML = `${ taskName }`;
     TASKS[taskKey]["incompleted"] = true;
 
-    console.log("Incomplete task:", taskKey);
-
     // Update to local storage
     localStorage.setItem("tasks", JSON.stringify(TASKS));
+}
+
+function attachDeleteTaskHandler() {
+    const deleteTaskBtn = document.getElementById('delete-task-btn');
+    let taskCount = 0;
+
+    const deleteTaskCbs = document.querySelectorAll('.delete-task-checkbox');
+    deleteTaskCbs.forEach(
+        (checkbox) => {
+            checkbox.addEventListener("change", () => {
+                const taskKey = checkbox.dataset.taskKey;
+                if (TASKS.hasOwnProperty(taskKey)) {
+                    TASKS_TO_DELETE.push(taskKey);
+                    taskCount += 1;
+                    deleteTaskBtn.innerHTML = `Delete (${ taskCount })`;
+                }
+                console.log(TASKS_TO_DELETE);
+            })
+        }
+    )
 }
 
 export { TASKS_TO_DISPLAY };
