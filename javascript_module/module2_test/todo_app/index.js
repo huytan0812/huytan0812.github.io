@@ -3,15 +3,14 @@ import { ActiveTaskComponent } from "./components/active_tasks.js"
 import { CompletedTaskComponent } from "./components/completed_tasks.js";
 import { AddTaskComponent } from "./components/add_task.js";
 
+let LS_TASKS = JSON.parse(localStorage.getItem("tasks"));
+let TASKS = (LS_TASKS) ? LS_TASKS : {};
 let TASKS_TO_DISPLAY = [];
 
 document.addEventListener("DOMContentLoaded", function index() {
     const addTC = document.getElementsByTagName('addtaskcomponent')[0];
     addTC.innerHTML = AddTaskComponent();
     
-    // Get local storage tasks
-    let LStasks = JSON.parse(localStorage.getItem("tasks"));
-    let tasks = (LStasks) ? LStasks : {};
     const displayTasks = document.getElementById('display-tasks');
 
     // Default display tasks in All task component
@@ -19,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function index() {
         let incompletedTasks = [];
         let completedTasks = [];
 
-        for (let key in tasks) {
+        for (let key in TASKS) {
             let task = {};
-            task[key] = tasks[key];
+            task[key] = TASKS[key];
 
             if (task[key]["incompleted"]) {
                 incompletedTasks.unshift(task);
@@ -48,10 +47,9 @@ document.addEventListener("DOMContentLoaded", function index() {
             (checkbox) => checkbox.addEventListener("change", (event) => {
                 const target = event.target;
                 const taskKey = target.dataset.taskKey;
-                const tasks = JSON.parse(localStorage.getItem("tasks"));
 
-                if (tasks.hasOwnProperty(taskKey)) {
-                    (target.checked) ? complete(target, tasks) : incomplete(target, tasks);
+                if (TASKS.hasOwnProperty(taskKey)) {
+                    (target.checked) ? complete(target) : incomplete(target);
                 }
             })
         )
@@ -68,9 +66,9 @@ document.addEventListener("DOMContentLoaded", function index() {
             let incompletedTasks = [];
             let completedTasks = [];
     
-            for (let key in tasks) {
+            for (let key in TASKS) {
                 let task = {};
-                task[key] = tasks[key];
+                task[key] = TASKS[key];
     
                 if (task[key]["incompleted"]) {
                     incompletedTasks.unshift(task);
@@ -105,9 +103,9 @@ document.addEventListener("DOMContentLoaded", function index() {
         const tasksToDisplay = () => {
             let incompletedTasks = [];
 
-            for (let key in tasks) {
+            for (let key in TASKS) {
                 let task = {};
-                task[key] = tasks[key];
+                task[key] = TASKS[key];
 
                 if (task[key]["incompleted"]) {
                     incompletedTasks.unshift(task);
@@ -133,9 +131,9 @@ document.addEventListener("DOMContentLoaded", function index() {
         const tasksToDisplay = () => {
             let incompletedTasks = [];
 
-            for (let key in tasks) {
+            for (let key in TASKS) {
                 let task = {};
-                task[key] = tasks[key];
+                task[key] = TASKS[key];
 
                 if (!task[key]["incompleted"]) {
                     incompletedTasks.unshift(task);
@@ -159,7 +157,9 @@ document.addEventListener("DOMContentLoaded", function index() {
         const newTask = addTask(addTaskForm);
 
         // Update tasks after adding new task
-        tasks = JSON.parse(localStorage.getItem("tasks"));
+        TASKS = JSON.parse(localStorage.getItem("tasks"));
+
+        console.log(TASKS);
 
         // Hanlde after adding new task to local storage
         const firstTask = displayTasks.firstElementChild;
@@ -177,9 +177,7 @@ document.addEventListener("DOMContentLoaded", function index() {
 function addTask(form) {
     const task = form.elements["task"].value;
 
-    const LStasks = JSON.parse(localStorage.getItem("tasks"));
-    const tasks = (LStasks) ? LStasks : {};
-    const taskCount = (LStasks) ? Object.keys(LStasks).length : 0;
+    const taskCount = Object.keys(TASKS).length;
 
     const taskKey = `task_${taskCount + 1}`;
     const newTask = {
@@ -187,10 +185,10 @@ function addTask(form) {
         'incompleted': true,
     };
 
-    tasks[taskKey] = newTask;
+    TASKS[taskKey] = newTask;
 
     // Save to local storage
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(TASKS));
 
     // Clear the field
     form.elements["task"].value = "";
@@ -205,13 +203,13 @@ function attachCheckboxHandler() {
     
 }
 
-function complete(checkbox, tasks) {
+function complete(checkbox) {
     const taskKey = checkbox.dataset.taskKey;
     const label = checkbox.nextElementSibling;
     const taskName = label.dataset.taskName;
 
     label.innerHTML = `<s>${ taskName }</s><span style="color: green; font-size: 1.5rem;">Đánh dấu là đã hoàn thành</span>`;
-    tasks[taskKey]["incompleted"] = false;
+    TASKS[taskKey]["incompleted"] = false;
 
     console.log("Complete task:", taskKey);
     
@@ -219,18 +217,18 @@ function complete(checkbox, tasks) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function incomplete(checkbox, tasks) {
+function incomplete(checkbox) {
     const taskKey = checkbox.dataset.taskKey;
     const label = checkbox.nextElementSibling;
     const taskName = label.dataset.taskName;
 
     label.innerHTML = `${ taskName }`;
-    tasks[taskKey]["incompleted"] = true;
+    TASKS[taskKey]["incompleted"] = true;
 
     console.log("Incomplete task:", taskKey);
 
     // Update to local storage
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(TASKS));
 }
 
 export { TASKS_TO_DISPLAY };
