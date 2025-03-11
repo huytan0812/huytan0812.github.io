@@ -4,3 +4,19 @@
     margin: 0;
     font-size: 62.5%;
 }
+
+h2 {
+    text-align: center;
+}
+
+p, a {
+    font-size: 1.5rem;
+}
+
+.btn {
+    font-size: 1.5rem !important;
+}
+
+#main {
+    max-width: 966px;
+}
