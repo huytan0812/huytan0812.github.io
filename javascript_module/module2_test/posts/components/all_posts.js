@@ -1,8 +1,13 @@
 import { allPosts } from "../index.js";
 import { getUserName } from "./all_users.js";
+import { SearchForPostByIdForm } from "./search_for_posts_by_id.js";
 
 function AllPostComponent() {
-    let allPostComponent = ``;
+    let allPostComponent = `
+    <div id="search-for-post">
+        ${ SearchForPostByIdForm() }
+    </div>
+    `;
 
     for (let post of allPosts) {
         allPostComponent += `

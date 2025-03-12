@@ -6,6 +6,8 @@ import { importPosts } from "./components/posts.js";
 import { displayUser, getUserByEmail } from "./components/user_details.js";
 import { importUsers } from "./components/users.js";
 import { RegisterFormComponent, validateRegistration, newUser } from "./components/register.js";
+import { SearchForPostByIdForm, SearchForPostResultById } from "./components/search_for_posts_by_id.js";
+import { searchForPostByEmailForm, SearchForPostResultByEmail } from "./components/search_for_post_by_email.js";
 
 const getIsPostImported = localStorage.getItem("isPostImported");
 const isPostImported = (getIsPostImported) ? getIsPostImported : false;
@@ -118,13 +120,30 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Default render all posts
     main.innerHTML = AllPostComponent();
+    switchToSearchByPostId();
+
+    // const searchByEmail = document.getElementById('search-by-email');
+    // searchByEmail.addEventListener("click", () => {
+    //     searchForPost.innerHTML = searchForPostByEmailForm();
+    //     const searchById = document.getElementById('search-by-id');
+    //     searchById.addEventListener("click", () => {
+    //         searchForPost.innerHTML = SearchForPostByIdForm();
+
+    //     });
+    // })
+
     attachPostDetailHandler();
 
+    // Switch to all post component
     togglePosts.addEventListener("click", () => {
         main.innerHTML = AllPostComponent();
         
+        switchToSearchByPostId();
+
         attachPostDetailHandler();
-    });    
+    });
+    
+    // Switch to all user component
     toggleUsers.addEventListener("click", () => { 
         main.innerHTML = AllUserComponent();
 
@@ -144,6 +163,42 @@ function attachPostDetailHandler() {
             btn.addEventListener("click", () => main.innerHTML = displayPost(btn.dataset.postId));
         }
     )
+}
+
+function switchToSearchByPostId() {
+    const searchForPost = document.getElementById('search-for-post');
+
+    searchForPost.innerHTML = SearchForPostByIdForm();
+
+    const searchForPostByIdForm = document.forms["search-for-post-by-id"];
+        searchForPostByIdForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const searchValue = searchForPostByIdForm.elements['q_post'].value.trim();
+
+            main.innerHTML = SearchForPostResultById(parseInt(searchValue));
+        })
+
+    const searchByEmail = document.getElementById('search-by-email');
+    searchByEmail.addEventListener("click", () => switchToSearchByEmail());
+}
+
+function switchToSearchByEmail() {
+    const searchForPost = document.getElementById('search-for-post');
+    
+    searchForPost.innerHTML = searchForPostByEmailForm();
+
+    const form = document.forms["search-for-post-by-email"];
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const searchValue = form.elements['q_email'].value.trim();
+
+        main.innerHTML = SearchForPostResultByEmail(searchValue);
+    })
+
+    const searchById = document.getElementById('search-by-id');
+    searchById.addEventListener("click", () => switchToSearchByPostId());
 }
 
 export { allPosts, allUsers };
