@@ -5,7 +5,7 @@ function AllUserComponent() {
 
     for (let user of allUsers) {
         allUserComponent += `
-        <div class="user-list mt-3">
+        <div class="user-list box-shadow-wrapper mt-3">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex">
                     <p class="mb-0"><strong>Id: </strong> ${ user['id'] }</p>

@@ -9,8 +9,12 @@ h2 {
     text-align: center;
 }
 
-p, a, strong {
+p, a, strong, span, label {
     font-size: 1.5rem;
+}
+
+.form-control {
+    font-size: 1.5rem !important;
 }
 
 .btn {
@@ -19,14 +23,31 @@ p, a, strong {
 
 .post-list {
     padding: 0.5rem;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border-radius: 4px;
+}
+
+.post-detail {
+    padding: 0.5rem;
 }
 
 .user-list {
     padding: 0.5rem;
+}
+
+.user-posts-count {
+    padding: 0.5rem;
+    color: white;
+    background-color: #007bff;
+    border-radius: 4px;
+}
+
+.box-shadow-wrapper {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 4px;
+}
+
+.error {
+    color: red;
+    text-align: center;
 }
 
 #main {

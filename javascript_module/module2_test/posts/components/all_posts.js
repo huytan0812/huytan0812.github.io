@@ -6,7 +6,7 @@ function AllPostComponent() {
 
     for (let post of allPosts) {
         allPostComponent += `
-        <div class="post-list mt-3">
+        <div class="post-list box-shadow-wrapper mt-3">
             <div class="d-flex">
                 <p><strong>Id: </strong> ${ post['id'] }</p>
                 <p class="ms-3"><strong>Title: </strong> ${ post['title'] }</p>
