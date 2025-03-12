@@ -498,3 +498,13 @@ let posts = [
 		updated_at: '2022-10-07',
 	},
 ];
+
+function importPosts() {
+	// Import posts to local storage
+	localStorage.setItem("posts", JSON.stringify(posts));
+	
+	// Set flag isPostImported to True to local storage
+	localStorage.setItem("isPostImported", true);
+}
+
+export { importPosts };

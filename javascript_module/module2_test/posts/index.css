@@ -9,12 +9,20 @@ h2 {
     text-align: center;
 }
 
-p, a {
+p, a, strong {
     font-size: 1.5rem;
 }
 
 .btn {
     font-size: 1.5rem !important;
+}
+
+.post-list {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    justify-content: center;
+    align-items: start;
 }
 
 #main {

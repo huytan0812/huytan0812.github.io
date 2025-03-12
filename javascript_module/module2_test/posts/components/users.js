@@ -70,3 +70,12 @@ let users = [
 		password: '12345678',
 	},
 ];
+
+function importUsers() {
+	localStorage.setItem("users", JSON.stringify(users));
+
+	// Set flag isUserImported to True to local storage
+	localStorage.setItem("isUserImported", true);
+}
+
+export { importUsers };
