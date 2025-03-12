@@ -9,6 +9,10 @@ h2 {
     text-align: center;
 }
 
+h3 {
+    text-align: center;
+}
+
 p, a, strong, span, label {
     font-size: 1.5rem;
 }

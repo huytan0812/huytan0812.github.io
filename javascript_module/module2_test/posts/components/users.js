@@ -76,6 +76,9 @@ function importUsers() {
 
 	// Set flag isUserImported to True to local storage
 	localStorage.setItem("isUserImported", true);
+
+	// Set PK to local storage
+    localStorage.setItem("PK", users.length);
 }
 
 export { importUsers };
