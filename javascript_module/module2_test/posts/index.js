@@ -2,6 +2,7 @@ import { AllPostComponent } from "./components/all_posts.js";
 import { AllUserComponent } from "./components/all_users.js";
 import { importPosts } from "./components/posts.js";
 import { importUsers } from "./components/users.js";
+import { displayPost } from "./components/post_details.js";
 
 const getIsPostImported = localStorage.getItem("isPostImported");
 const isPostImported = (getIsPostImported) ? getIsPostImported : false;
@@ -31,7 +32,25 @@ document.addEventListener("DOMContentLoaded", function() {
     const toggleUsers = document.getElementById('toggle-users');
     const main = document.getElementById('main');
 
-    togglePosts.addEventListener("click", () => main.innerHTML = AllPostComponent());    
+    // Default render all posts
+    main.innerHTML = AllPostComponent();
+    const viewPost = document.querySelectorAll('.view-post');
+    viewPost.forEach(
+        (btn) => {
+            btn.addEventListener("click", () => main.innerHTML = displayPost(btn.dataset.postId));
+        }
+    )
+
+    togglePosts.addEventListener("click", () => {
+        main.innerHTML = AllPostComponent();
+        
+        const viewPost = document.querySelectorAll('.view-post');
+        viewPost.forEach(
+            (btn) => {
+                btn.addEventListener("click", () => main.innerHTML = displayPost(btn.dataset.postId));
+            }
+        )
+    });    
     toggleUsers.addEventListener("click", () => main.innerHTML = AllUserComponent());    
 })
 

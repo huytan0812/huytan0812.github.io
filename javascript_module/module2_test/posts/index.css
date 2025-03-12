@@ -18,13 +18,18 @@ p, a, strong {
 }
 
 .post-list {
-    display: flex;
-    flex-direction: column;
     padding: 0.5rem;
-    justify-content: center;
-    align-items: start;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
+}
+
+.user-list {
+    padding: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
 }
 
 #main {
+    margin: auto;
     max-width: 966px;
 }
