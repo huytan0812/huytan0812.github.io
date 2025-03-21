@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Layout from './layout/Layout';
+import { Layout } from './layout/Layout.jsx';
 import AboutUs from './pages/AboutUs';
 import Booking from './pages/Booking';
 import Home from './pages/Home';
@@ -11,7 +11,6 @@ import RecipeList from './pages/Menu/RecipeList';
 import News from './pages/News';
 
 function App() {
-
   return (
     <Routes>
       <Route path='/' element = {<Layout />}>

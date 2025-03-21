@@ -1,6 +1,7 @@
-import { Button, Card, Flex, Spin, Tag, Pagination, Form } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Card, Flex, Spin, Tag, Pagination, Switch } from 'antd';
+import React, { useEffect, useState, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { ThemeContext } from '../../layout/Layout.jsx';
 
 const color = [
   'magenta',
@@ -20,27 +21,19 @@ const RecipeList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [menu, setMenu] = useState([]);
-
-  async function getAllRecipes() {
-    try {
-      const response = await fetch('https://dummyjson.com/recipes'); 
-      const data = await response.json();
-      setTotalPages(data.recipes.length);
-      return data.recipes;
-    }
-    catch (error) {
-      console.error(error);
-    }
-  }
-  getAllRecipes();
+  const value = useContext(ThemeContext);
 
   const pageSize = 12;
 
   useEffect(() => {
     const getRecipes = async () => {
       try {
-        const response = await fetch(`https://dummyjson.com/recipes?limit=${ pageSize }&skip=${ pageSize * currentPage}`);
-        const data = await response.json();
+        const response = await fetch("https://dummyjson.com/recipes");
+        const allRecipes = await response.json();
+        setTotalPages(allRecipes.recipes.length);
+
+        const pageItems = await fetch(`https://dummyjson.com/recipes?limit=${ pageSize }&skip=${ pageSize * currentPage}`);
+        const data = await pageItems.json();
         setMenu(data.recipes);
       }
       catch (error) {
@@ -60,7 +53,7 @@ const RecipeList = () => {
 
   return (
     <React.Fragment>
-        <Form />
+        <Switch checkedChildren="Light mode" unCheckedChildren="Dark mode" onChange={(checked) => {(checked) ? value.setTheme('dark') : value.setTheme('light')}}/>
         <h1 style={{ textAlign: 'center' }}>Menu trang { currentPage } { totalPages }</h1>
         <Flex justify='center' wrap='wrap' gap='small'>
         {
@@ -98,7 +91,7 @@ const RecipeList = () => {
                         })
                     }
                 </Flex>
-                <p style={{ marginTop: '10px' }}>{ recipe.name }</p>
+                <p style={{ marginTop: '10px', color: value.theme === 'light' ? 'black' : 'white' }}>{ recipe.name }</p>
                 <p style={{ marginTop: '10px' }}>
                     <Button type='primary'>
                         <NavLink to={`/menu/${ recipe.id }`}>
