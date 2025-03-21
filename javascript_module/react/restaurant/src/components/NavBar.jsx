@@ -4,7 +4,13 @@ import { Flex } from 'antd';
 
 const NavBar = () => {
   return (
-    <Flex>
+    <Flex justify="space-between" 
+          style={
+            { padding: '10px 20px 10px 20px', 
+              borderBottom: '1px solid black',
+           }
+          }
+    >
         <NavLink to='/' end>Trang chủ</NavLink>
         <NavLink to='/menu'>Menu</NavLink>
         <NavLink to='/about_us'>Về chúng tôi</NavLink>
