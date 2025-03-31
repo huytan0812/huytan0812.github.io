@@ -7,3 +7,17 @@
 .active {
   color: #d2691e;
 }
+
+.recipe-image {
+  width: 50%;
+  margin: auto;
+}
+
+.recipe-title {
+  text-align: center;
+}
+
+.dark-theme {
+  background-color: black;
+  color: white;
+}

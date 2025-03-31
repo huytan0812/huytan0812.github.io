@@ -1,39 +1,30 @@
-import { Button, Card, Flex, Spin, Tag, Pagination, Switch } from 'antd';
-import React, { useEffect, useState, useContext } from 'react';
+import { Button, Card, Flex, Pagination, Spin, Switch, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ThemeContext } from '../../layout/Layout.jsx';
-
-const color = [
-  'magenta',
-  'gold',
-  'lime',
-  'red',
-  'blue',
-  'geekblue',
-  'volcano',
-  'orange',
-  'green',
-  'cyan',
-  'purple'
-];
+import color from '../../assets/colors.js';
+import axiosHTTP from '../../axios_handlers/recipeListAxiosHandler.js';
+import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 
 const RecipeList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [menu, setMenu] = useState([]);
-  const value = useContext(ThemeContext);
+  const value = useThemeContext();
 
   const pageSize = 12;
 
   useEffect(() => {
     const getRecipes = async () => {
       try {
-        const response = await fetch("https://dummyjson.com/recipes");
-        const allRecipes = await response.json();
-        setTotalPages(allRecipes.recipes.length);
-
-        const pageItems = await fetch(`https://dummyjson.com/recipes?limit=${ pageSize }&skip=${ pageSize * currentPage}`);
-        const data = await pageItems.json();
+        const pageItems = await axiosHTTP.get('/recipes', {
+            params: {
+              'limit': pageSize,
+              'skip': pageSize * currentPage
+            }
+          }
+          );
+        const data = pageItems.data;
+        setTotalPages(data.total);
         setMenu(data.recipes);
       }
       catch (error) {
@@ -68,6 +59,7 @@ const RecipeList = () => {
                     marginTop: 10,
                     }
                 }
+                className = {(value.theme === 'light') ? 'light' : 'dark-theme'}
                 >
                 <p>
                     <img
@@ -117,4 +109,4 @@ const RecipeList = () => {
   )
 }
 
-export default RecipeList
+export default RecipeList;
