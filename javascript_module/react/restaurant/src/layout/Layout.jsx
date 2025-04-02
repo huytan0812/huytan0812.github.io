@@ -1,14 +1,12 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import { CartProvider } from '../contexts/CartContext.jsx';
 import { ThemeProvider } from '../contexts/ThemeContext.jsx';
-import { useUserContext } from '../contexts/UserContext.jsx';
-
-const UserContext = createContext();
+import { useAuthContext } from '../contexts/AuthContext.jsx';
 
 const Layout = () => {
-  const { user, setUser } = useUserContext();
+  const { user, logout } = useAuthContext();
 
   return (
     <React.Fragment>
@@ -23,5 +21,5 @@ const Layout = () => {
   )
 }
 
-export { Layout, UserContext };
+export { Layout };
 
